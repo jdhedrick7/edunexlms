@@ -43,7 +43,7 @@ export default async function Home() {
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2">
             <Image
-              src="/EduNexLogo.svg"
+              src="/logo.svg"
               alt="EduNex"
               width={32}
               height={32}
@@ -377,7 +377,7 @@ export default async function Home() {
           <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
             <Link href="/" className="flex items-center gap-2">
               <Image
-                src="/EduNexLogo.svg"
+                src="/logo.svg"
                 alt="EduNex"
                 width={32}
                 height={32}
