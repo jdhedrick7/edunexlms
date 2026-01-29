@@ -8,11 +8,11 @@ export async function GET(
 ) {
   const { jobId } = await params
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  // Check for API key first (for VM harness)
+  const apiKey = request.headers.get('x-api-key')
+  const expectedKey = process.env.EDIT_HARNESS_API_KEY
+  const isHarness = apiKey === expectedKey
 
   const { data: job, error } = await supabase
     .from('course_edit_jobs')
@@ -29,11 +29,14 @@ export async function GET(
     return NextResponse.json({ error: 'Job not found' }, { status: 404 })
   }
 
-  // Check if user has access (teacher of the course or harness API key)
-  const apiKey = request.headers.get('x-api-key')
-  const expectedKey = process.env.EDIT_HARNESS_API_KEY
+  // If not harness, verify user is teacher
+  if (!isHarness) {
+    const { data: { user } } = await supabase.auth.getUser()
 
-  if (apiKey !== expectedKey) {
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const { data: enrollment } = await supabase
       .from('enrollments')
       .select('role')

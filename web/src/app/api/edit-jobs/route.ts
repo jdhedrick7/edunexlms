@@ -3,20 +3,15 @@ import { NextRequest, NextResponse } from 'next/server'
 
 // GET: List pending edit jobs (for VM harness polling)
 export async function GET(request: NextRequest) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
-  // Check for API key header (for VM harness)
+  // Check for API key header first (for VM harness)
   const apiKey = request.headers.get('x-api-key')
   const expectedKey = process.env.EDIT_HARNESS_API_KEY
 
   if (!apiKey || apiKey !== expectedKey) {
-    return NextResponse.json({ error: 'Invalid API key' }, { status: 403 })
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
+
+  const supabase = await createClient()
 
   const { searchParams } = new URL(request.url)
   const status = searchParams.get('status') || 'pending'
