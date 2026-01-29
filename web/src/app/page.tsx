@@ -57,8 +57,8 @@ export default async function Home() {
             <a href="#impact" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">Impact</a>
           </nav>
           <div className="flex items-center gap-3">
-            <Link href="/login">
-              <Button size="sm" className="bg-blue-600 hover:bg-blue-700">Login</Button>
+            <Link href="mailto:contact@edunexlms.com">
+              <Button size="sm" className="bg-blue-600 hover:bg-blue-700">Contact</Button>
             </Link>
           </div>
         </div>
@@ -89,9 +89,9 @@ export default async function Home() {
             </p>
 
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Link href="/login">
+              <Link href="mailto:contact@edunexlms.com">
                 <Button size="lg" className="w-full bg-blue-600 px-8 hover:bg-blue-700 sm:w-auto">
-                  Login
+                  Contact Us
                 </Button>
               </Link>
               <Link href="#solution">
@@ -334,14 +334,9 @@ export default async function Home() {
                 Join institutions providing every student a personal Socratic tutor
                 and every teacher a brilliant digital assistant.
               </p>
-              <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <Link href="/login">
-                  <Button size="lg" className="w-full bg-white text-blue-600 hover:bg-blue-50 sm:w-auto">
-                    Login
-                  </Button>
-                </Link>
+              <div className="mt-8">
                 <Link href="mailto:contact@edunexlms.com">
-                  <Button size="lg" className="w-full border-2 border-white bg-transparent text-white hover:bg-white/10 sm:w-auto">
+                  <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50">
                     Contact Us
                   </Button>
                 </Link>
