@@ -48,7 +48,7 @@ export default async function VersionsPage({ params }: VersionsPageProps) {
   }
 
   // Get all versions
-  const { data: versions } = await supabase
+  const { data: versionsData } = await supabase
     .from('course_versions')
     .select(`
       *,
@@ -57,6 +57,15 @@ export default async function VersionsPage({ params }: VersionsPageProps) {
     `)
     .eq('course_id', courseId)
     .order('version_number', { ascending: false })
+
+  // Transform to match expected type (filter out invalid statuses)
+  const versions = (versionsData || [])
+    .filter((v) => v.status && ['draft', 'review', 'approved', 'archived'].includes(v.status))
+    .map((v) => ({
+      ...v,
+      status: v.status as 'draft' | 'review' | 'approved' | 'archived',
+      created_at: v.created_at || new Date().toISOString(),
+    }))
 
   return (
     <div className="space-y-6">
