@@ -344,7 +344,7 @@ export default async function Home() {
                   </Button>
                 </Link>
                 <Link href="mailto:contact@edunexlms.com">
-                  <Button size="lg" variant="outline" className="w-full border-white text-white hover:bg-white/10 sm:w-auto">
+                  <Button size="lg" className="w-full border-2 border-white bg-transparent text-white hover:bg-white/10 sm:w-auto">
                     Contact Us
                   </Button>
                 </Link>
