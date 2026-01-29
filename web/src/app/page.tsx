@@ -58,10 +58,7 @@ export default async function Home() {
           </nav>
           <div className="flex items-center gap-3">
             <Link href="/login">
-              <Button variant="ghost" size="sm">Sign in</Button>
-            </Link>
-            <Link href="/signup">
-              <Button size="sm" className="bg-blue-600 hover:bg-blue-700">Get Started</Button>
+              <Button size="sm" className="bg-blue-600 hover:bg-blue-700">Login</Button>
             </Link>
           </div>
         </div>
@@ -92,14 +89,14 @@ export default async function Home() {
             </p>
 
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Link href="/signup">
+              <Link href="/login">
                 <Button size="lg" className="w-full bg-blue-600 px-8 hover:bg-blue-700 sm:w-auto">
-                  Start Free Trial
+                  Login
                 </Button>
               </Link>
               <Link href="#solution">
                 <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                  See How It Works
+                  Learn More
                 </Button>
               </Link>
             </div>
@@ -338,9 +335,9 @@ export default async function Home() {
                 and every teacher a brilliant digital assistant.
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <Link href="/signup">
+                <Link href="/login">
                   <Button size="lg" className="w-full bg-white text-blue-600 hover:bg-blue-50 sm:w-auto">
-                    Get Started Free
+                    Login
                   </Button>
                 </Link>
                 <Link href="mailto:contact@edunexlms.com">
