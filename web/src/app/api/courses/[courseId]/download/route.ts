@@ -60,7 +60,7 @@ export async function GET(
       .limit(1)
       .single()
 
-    targetVersionId = latestVersion?.id
+    targetVersionId = latestVersion?.id ?? null
   }
 
   if (!targetVersionId) {
