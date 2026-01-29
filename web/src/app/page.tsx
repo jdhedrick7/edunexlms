@@ -12,7 +12,10 @@ import {
   TrendingUpIcon,
   GraduationCapIcon,
   MessageSquareIcon,
-  CheckCircleIcon,
+  ClockIcon,
+  FileTextIcon,
+  ZapIcon,
+  TargetIcon,
 } from 'lucide-react'
 
 export default async function Home() {
@@ -45,9 +48,9 @@ export default async function Home() {
             <span className="text-xl font-bold text-gray-900 dark:text-white">EduNex</span>
           </div>
           <nav className="hidden items-center gap-8 md:flex">
-            <a href="#features" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">Features</a>
+            <a href="#problem" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">The Problem</a>
+            <a href="#solution" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">Our Solution</a>
             <a href="#impact" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">Impact</a>
-            <a href="#how-it-works" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">How It Works</a>
           </nav>
           <div className="flex items-center gap-3">
             <Link href="/login">
@@ -69,20 +72,19 @@ export default async function Home() {
           <div className="container relative mx-auto max-w-5xl text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-1.5 text-sm text-blue-700 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300">
               <SparklesIcon className="h-4 w-4" />
-              <span>Proven results in Kedougou, Senegal</span>
+              <span>Validated with 2,000 students in Kédougou, Senegal</span>
             </div>
 
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl md:text-6xl lg:text-7xl">
               Every student deserves a{' '}
               <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                personal AI tutor
+                personal tutor
               </span>
             </h1>
 
-            <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-600 dark:text-gray-400 md:text-xl">
-              EduNex is an AI-first learning platform that gives every student personalized
-              tutoring grounded in their actual course materials. No hallucinations, just
-              real learning support.
+            <p className="mx-auto mt-6 max-w-3xl text-lg text-gray-600 dark:text-gray-400 md:text-xl">
+              A 24/7 Socratic tutor for every student. A brilliant digital assistant for every teacher.
+              We&apos;re replacing the &quot;Digital Filing Cabinet&quot; with an AI-native pedagogy engine.
             </p>
 
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -91,7 +93,7 @@ export default async function Home() {
                   Start Free Trial
                 </Button>
               </Link>
-              <Link href="#how-it-works">
+              <Link href="#solution">
                 <Button size="lg" variant="outline" className="w-full sm:w-auto">
                   See How It Works
                 </Button>
@@ -100,72 +102,72 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Impact Section */}
-        <section id="impact" className="border-y bg-gray-50 px-4 py-16 dark:bg-gray-900/50 md:py-24">
+        {/* Problem Section */}
+        <section id="problem" className="border-y bg-gray-50 px-4 py-16 dark:bg-gray-900/50 md:py-24">
           <div className="container mx-auto max-w-5xl">
             <div className="text-center">
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
-                Proven Impact in Kedougou
+                The LMS Has Failed Education
               </h2>
               <p className="mx-auto mt-4 max-w-2xl text-gray-600 dark:text-gray-400">
-                Our pilot program in Kedougou, Senegal demonstrated massive improvements in
-                student learning outcomes, proving that AI-powered personalized tutoring
-                can transform education in underserved communities.
+                For 20 years, learning management systems have been digital filing cabinets.
+                They manage files, not learning. We&apos;re here to change that.
               </p>
             </div>
 
             <div className="mt-12 grid gap-8 md:grid-cols-3">
-              <div className="rounded-2xl border bg-white p-8 text-center shadow-sm dark:bg-gray-900">
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
-                  <TrendingUpIcon className="h-6 w-6 text-green-600 dark:text-green-400" />
+              <div className="rounded-2xl border bg-white p-8 shadow-sm dark:bg-gray-900">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900">
+                  <ClockIcon className="h-6 w-6 text-red-600 dark:text-red-400" />
                 </div>
                 <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
-                  Improved Outcomes
+                  Teacher Burnout
                 </h3>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  Students using EduNex showed significant improvement in comprehension
-                  and test performance compared to traditional methods.
+                  Educators spend 40% of their time on administrative overhead—grading,
+                  planning, compliance—rather than actual instruction.
                 </p>
               </div>
 
-              <div className="rounded-2xl border bg-white p-8 text-center shadow-sm dark:bg-gray-900">
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900">
-                  <GlobeIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              <div className="rounded-2xl border bg-white p-8 shadow-sm dark:bg-gray-900">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900">
+                  <TargetIcon className="h-6 w-6 text-orange-600 dark:text-orange-400" />
                 </div>
                 <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
-                  Accessible Anywhere
+                  The Individualization Gap
                 </h3>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  Works on low-bandwidth connections, making quality education accessible
-                  in remote and underserved areas.
+                  In a class of 30, the &quot;middle&quot; gets taught, the &quot;top&quot; gets bored,
+                  and the &quot;bottom&quot; falls behind. One-size-fits-all doesn&apos;t work.
                 </p>
               </div>
 
-              <div className="rounded-2xl border bg-white p-8 text-center shadow-sm dark:bg-gray-900">
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900">
-                  <UsersIcon className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+              <div className="rounded-2xl border bg-white p-8 shadow-sm dark:bg-gray-900">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
+                  <FileTextIcon className="h-6 w-6 text-gray-600 dark:text-gray-400" />
                 </div>
                 <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
-                  Teacher Multiplier
+                  File-First, Not Learning-First
                 </h3>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  Teachers can effectively support more students while AI handles
-                  individual questions and explanations.
+                  Legacy systems like Canvas and Blackboard are &quot;file-first&quot; with
+                  AI bolted on. We&apos;re interaction-centric from the ground up.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Features Section */}
-        <section id="features" className="px-4 py-16 md:py-24">
+        {/* Solution Section */}
+        <section id="solution" className="px-4 py-16 md:py-24">
           <div className="container mx-auto max-w-5xl">
             <div className="text-center">
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
-                AI-First Learning Platform
+                The 2-Sigma Solution
               </h2>
               <p className="mx-auto mt-4 max-w-2xl text-gray-600 dark:text-gray-400">
-                Built from the ground up to leverage AI for personalized education at scale.
+                Benjamin Bloom proved that 1:1 tutoring moves a student from the 50th to the 98th
+                percentile. We provide that at scale.
               </p>
             </div>
 
@@ -175,11 +177,11 @@ export default async function Home() {
                   <BrainIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">Personal AI Tutor</h3>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">Socratic Reasoning Agents</h3>
                   <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Every student gets a dedicated AI tutor that knows their course materials
-                    and learning history. Ask questions anytime, get accurate answers grounded
-                    in actual course content.
+                    Not a chatbot. Our AI is programmed to ask, not tell. It guides students
+                    to understanding through questions, not answers. The difference between
+                    a student who copies and a student who learns.
                   </p>
                 </div>
               </div>
@@ -189,25 +191,25 @@ export default async function Home() {
                   <BookOpenIcon className="h-5 w-5 text-green-600 dark:text-green-400" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">RAG-Powered Accuracy</h3>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">Linguistic Memory (RAG)</h3>
                   <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Using retrieval-augmented generation, our AI tutor searches course
-                    materials before answering. No hallucinations, just accurate information
-                    from your actual curriculum.
+                    The system remembers the curriculum and the student&apos;s history,
+                    ensuring help is always context-aware. No hallucinations—just accurate
+                    information grounded in actual course materials.
                   </p>
                 </div>
               </div>
 
               <div className="flex gap-4">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900">
-                  <SparklesIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                  <ZapIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">AI Course Editing</h3>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">Hours to Seconds</h3>
                   <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Teachers can update course materials using natural language. Just describe
-                    what you want to change, and AI handles the implementation with full
-                    version control.
+                    24/7 Socratic support reduces &quot;stuck time&quot; from hours to seconds.
+                    Students get help exactly when they need it, not during office hours
+                    three days later.
                   </p>
                 </div>
               </div>
@@ -217,11 +219,10 @@ export default async function Home() {
                   <MessageSquareIcon className="h-5 w-5 text-orange-600 dark:text-orange-400" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">Teacher AI Assistant</h3>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">Teacher Digital Assistant</h3>
                   <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Teachers get their own AI assistant to help with course management,
-                    answering student questions at scale, and identifying students who
-                    need extra support.
+                    AI-grading and diagnostic heatmaps reduce prep time by 80%. Teachers
+                    focus on high-value human mentorship, not administrative overhead.
                   </p>
                 </div>
               </div>
@@ -229,49 +230,92 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* How It Works */}
-        <section id="how-it-works" className="border-t bg-gray-50 px-4 py-16 dark:bg-gray-900/50 md:py-24">
+        {/* Impact Section */}
+        <section id="impact" className="border-t bg-gray-50 px-4 py-16 dark:bg-gray-900/50 md:py-24">
           <div className="container mx-auto max-w-5xl">
             <div className="text-center">
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
-                How It Works
+                Proven in Kédougou
               </h2>
               <p className="mx-auto mt-4 max-w-2xl text-gray-600 dark:text-gray-400">
-                Get started in minutes with a platform designed for simplicity.
+                Our pilot with 2,000 students in Kédougou, Senegal demonstrated massive
+                improvements in learning outcomes—proving AI-powered tutoring transforms
+                education in underserved communities.
               </p>
             </div>
 
-            <div className="mt-16 grid gap-8 md:grid-cols-3">
-              <div className="text-center">
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-xl font-bold text-white">
-                  1
+            <div className="mt-12 grid gap-8 md:grid-cols-3">
+              <div className="rounded-2xl border bg-white p-8 text-center shadow-sm dark:bg-gray-900">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
+                  <TrendingUpIcon className="h-6 w-6 text-green-600 dark:text-green-400" />
                 </div>
-                <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">Upload Course Content</h3>
+                <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
+                  Massive Improvement
+                </h3>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  Teachers upload lectures, readings, and materials. Our system automatically
-                  indexes everything for AI search.
+                  Students showed significant gains in comprehension and test performance
+                  compared to traditional instruction methods.
                 </p>
               </div>
 
-              <div className="text-center">
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-xl font-bold text-white">
-                  2
+              <div className="rounded-2xl border bg-white p-8 text-center shadow-sm dark:bg-gray-900">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900">
+                  <GlobeIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 </div>
-                <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">Students Learn & Ask</h3>
+                <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
+                  Resilient Connectivity
+                </h3>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  Students access materials, take quizzes, and ask their AI tutor
-                  questions anytime they need help.
+                  Designed to work on fluctuating signals—ensuring the Global South and
+                  Rural US have the same experience as Seattle.
                 </p>
               </div>
 
-              <div className="text-center">
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-xl font-bold text-white">
-                  3
+              <div className="rounded-2xl border bg-white p-8 text-center shadow-sm dark:bg-gray-900">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900">
+                  <UsersIcon className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                 </div>
-                <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">Track Progress</h3>
+                <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
+                  Leapfrog Opportunity
+                </h3>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  Teachers see analytics on student engagement and can identify who
-                  needs additional support.
+                  1.5M students in Senegal as proof of concept for the 1.2B students
+                  in emerging markets who can leapfrog legacy EdTech.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Why Now Section */}
+        <section className="px-4 py-16 md:py-24">
+          <div className="container mx-auto max-w-5xl">
+            <div className="text-center">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
+                Why Now?
+              </h2>
+              <p className="mx-auto mt-4 max-w-2xl text-gray-600 dark:text-gray-400">
+                We&apos;re at the inflection point where AI isn&apos;t a luxury—it&apos;s the new utility.
+              </p>
+            </div>
+
+            <div className="mt-12 grid gap-6 md:grid-cols-3">
+              <div className="rounded-xl border p-6 text-center">
+                <h3 className="font-semibold text-gray-900 dark:text-white">Search → Synthesis</h3>
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                  Moving from &quot;searching for answers&quot; to &quot;synthesizing knowledge.&quot;
+                </p>
+              </div>
+              <div className="rounded-xl border p-6 text-center">
+                <h3 className="font-semibold text-gray-900 dark:text-white">Universal Access</h3>
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                  Connectivity is ubiquitous. LLMs have matured into reasoning agents.
+                </p>
+              </div>
+              <div className="rounded-xl border p-6 text-center">
+                <h3 className="font-semibold text-gray-900 dark:text-white">Data Moat</h3>
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                  Every interaction creates a feedback loop that makes the tutor smarter.
                 </p>
               </div>
             </div>
@@ -279,15 +323,15 @@ export default async function Home() {
         </section>
 
         {/* CTA Section */}
-        <section className="px-4 py-16 md:py-24">
+        <section className="border-t px-4 py-16 md:py-24">
           <div className="container mx-auto max-w-4xl">
             <div className="rounded-3xl bg-gradient-to-r from-blue-600 to-indigo-600 p-8 text-center md:p-16">
               <h2 className="text-3xl font-bold text-white md:text-4xl">
-                Ready to transform education?
+                From Digital Storage to AI-Native Learning
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-blue-100">
-                Join institutions around the world using EduNex to provide personalized
-                AI tutoring to every student.
+                Join institutions providing every student a personal Socratic tutor
+                and every teacher a brilliant digital assistant.
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <Link href="/signup">
@@ -297,7 +341,7 @@ export default async function Home() {
                 </Link>
                 <Link href="mailto:contact@edunexlms.com">
                   <Button size="lg" variant="outline" className="w-full border-white text-white hover:bg-white/10 sm:w-auto">
-                    Contact Sales
+                    Contact Us
                   </Button>
                 </Link>
               </div>
@@ -334,7 +378,8 @@ export default async function Home() {
               <span className="text-xl font-bold text-gray-900 dark:text-white">EduNex</span>
             </div>
             <div className="flex gap-8 text-sm text-gray-600 dark:text-gray-400">
-              <a href="#features" className="hover:text-gray-900 dark:hover:text-white">Features</a>
+              <a href="#problem" className="hover:text-gray-900 dark:hover:text-white">The Problem</a>
+              <a href="#solution" className="hover:text-gray-900 dark:hover:text-white">Solution</a>
               <a href="#impact" className="hover:text-gray-900 dark:hover:text-white">Impact</a>
               <a href="mailto:contact@edunexlms.com" className="hover:text-gray-900 dark:hover:text-white">Contact</a>
             </div>
