@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { SetupDemoButton } from '@/components/setup-demo-button'
 import {
@@ -10,7 +11,6 @@ import {
   SparklesIcon,
   GlobeIcon,
   TrendingUpIcon,
-  GraduationCapIcon,
   MessageSquareIcon,
   ClockIcon,
   FileTextIcon,
@@ -41,12 +41,16 @@ export default async function Home() {
       {/* Header */}
       <header className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur-md dark:bg-gray-950/80">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600">
-              <GraduationCapIcon className="h-5 w-5 text-white" />
-            </div>
+          <Link href="/" className="flex items-center gap-2">
+            <Image
+              src="/EduNexLogo.svg"
+              alt="EduNex"
+              width={32}
+              height={32}
+              className="h-8 w-8"
+            />
             <span className="text-xl font-bold text-gray-900 dark:text-white">EduNex</span>
-          </div>
+          </Link>
           <nav className="hidden items-center gap-8 md:flex">
             <a href="#problem" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">The Problem</a>
             <a href="#solution" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">Our Solution</a>
@@ -371,12 +375,16 @@ export default async function Home() {
       <footer className="border-t bg-gray-50 px-4 py-12 dark:bg-gray-900">
         <div className="container mx-auto max-w-5xl">
           <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
-            <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600">
-                <GraduationCapIcon className="h-5 w-5 text-white" />
-              </div>
+            <Link href="/" className="flex items-center gap-2">
+              <Image
+                src="/EduNexLogo.svg"
+                alt="EduNex"
+                width={32}
+                height={32}
+                className="h-8 w-8"
+              />
               <span className="text-xl font-bold text-gray-900 dark:text-white">EduNex</span>
-            </div>
+            </Link>
             <div className="flex gap-8 text-sm text-gray-600 dark:text-gray-400">
               <a href="#problem" className="hover:text-gray-900 dark:hover:text-white">The Problem</a>
               <a href="#solution" className="hover:text-gray-900 dark:hover:text-white">Solution</a>
