@@ -182,7 +182,8 @@ async function searchCourseMaterials(
     const queryEmbedding = await generateEmbedding(query)
 
     // Search using pgvector
-    const { data: results, error } = await supabase.rpc('search_course_materials', {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: results, error } = await (supabase.rpc as any)('search_course_materials', {
       query_embedding: JSON.stringify(queryEmbedding),
       p_course_id: courseId,
       p_version_id: course.published_version_id,

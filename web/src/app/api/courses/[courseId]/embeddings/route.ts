@@ -138,7 +138,7 @@ export async function POST(
                     chunk_index: i,
                     content: chunks[i],
                     embedding: JSON.stringify(embeddings[i]),
-                    metadata: metadata[i],
+                    metadata: metadata[i] as unknown as undefined,
                   })
 
                 if (insertError) {
