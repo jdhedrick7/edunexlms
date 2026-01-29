@@ -58,7 +58,10 @@ export default async function Home() {
           </nav>
           <div className="flex items-center gap-3">
             <Link href="mailto:contact@edunexlms.com">
-              <Button size="sm" className="bg-blue-600 hover:bg-blue-700">Contact</Button>
+              <Button variant="ghost" size="sm">Contact</Button>
+            </Link>
+            <Link href="/login">
+              <Button size="sm" className="bg-blue-600 hover:bg-blue-700">Login</Button>
             </Link>
           </div>
         </div>
