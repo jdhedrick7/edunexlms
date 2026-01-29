@@ -1,6 +1,14 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Layer 3 (back) - offset down and right -->
-  <g opacity="0.4">
+  <!-- Layer 3 (back) - top right -->
+  <g opacity="0.5">
+    <rect x="12" y="2" width="3" height="3" rx="0.5" fill="#2563eb"/>
+    <rect x="16" y="2" width="3" height="3" rx="0.5" fill="#2563eb"/>
+    <rect x="20" y="2" width="3" height="3" rx="0.5" fill="#2563eb"/>
+    <rect x="24" y="2" width="3" height="3" rx="0.5" fill="#2563eb"/>
+    <rect x="12" y="6" width="3" height="3" rx="0.5" fill="#2563eb"/>
+    <rect x="16" y="6" width="3" height="3" rx="0.5" fill="#2563eb"/>
+    <rect x="20" y="6" width="3" height="3" rx="0.5" fill="#2563eb"/>
+    <rect x="24" y="6" width="3" height="3" rx="0.5" fill="#2563eb"/>
     <rect x="12" y="10" width="3" height="3" rx="0.5" fill="#2563eb"/>
     <rect x="16" y="10" width="3" height="3" rx="0.5" fill="#2563eb"/>
     <rect x="20" y="10" width="3" height="3" rx="0.5" fill="#2563eb"/>
@@ -9,18 +17,10 @@
     <rect x="16" y="14" width="3" height="3" rx="0.5" fill="#2563eb"/>
     <rect x="20" y="14" width="3" height="3" rx="0.5" fill="#2563eb"/>
     <rect x="24" y="14" width="3" height="3" rx="0.5" fill="#2563eb"/>
-    <rect x="12" y="18" width="3" height="3" rx="0.5" fill="#2563eb"/>
-    <rect x="16" y="18" width="3" height="3" rx="0.5" fill="#2563eb"/>
-    <rect x="20" y="18" width="3" height="3" rx="0.5" fill="#2563eb"/>
-    <rect x="24" y="18" width="3" height="3" rx="0.5" fill="#2563eb"/>
-    <rect x="12" y="22" width="3" height="3" rx="0.5" fill="#2563eb"/>
-    <rect x="16" y="22" width="3" height="3" rx="0.5" fill="#2563eb"/>
-    <rect x="20" y="22" width="3" height="3" rx="0.5" fill="#2563eb"/>
-    <rect x="24" y="22" width="3" height="3" rx="0.5" fill="#2563eb"/>
   </g>
 
   <!-- Layer 2 (middle) -->
-  <g opacity="0.7">
+  <g opacity="0.75">
     <rect x="8" y="6" width="3" height="3" rx="0.5" fill="#2563eb"/>
     <rect x="12" y="6" width="3" height="3" rx="0.5" fill="#2563eb"/>
     <rect x="16" y="6" width="3" height="3" rx="0.5" fill="#2563eb"/>
@@ -41,14 +41,6 @@
 
   <!-- Layer 1 (front) -->
   <g>
-    <rect x="4" y="2" width="3" height="3" rx="0.5" fill="#2563eb"/>
-    <rect x="8" y="2" width="3" height="3" rx="0.5" fill="#2563eb"/>
-    <rect x="12" y="2" width="3" height="3" rx="0.5" fill="#2563eb"/>
-    <rect x="16" y="2" width="3" height="3" rx="0.5" fill="#2563eb"/>
-    <rect x="4" y="6" width="3" height="3" rx="0.5" fill="#2563eb"/>
-    <rect x="8" y="6" width="3" height="3" rx="0.5" fill="#2563eb"/>
-    <rect x="12" y="6" width="3" height="3" rx="0.5" fill="#2563eb"/>
-    <rect x="16" y="6" width="3" height="3" rx="0.5" fill="#2563eb"/>
     <rect x="4" y="10" width="3" height="3" rx="0.5" fill="#2563eb"/>
     <rect x="8" y="10" width="3" height="3" rx="0.5" fill="#2563eb"/>
     <rect x="12" y="10" width="3" height="3" rx="0.5" fill="#2563eb"/>
@@ -57,5 +49,13 @@
     <rect x="8" y="14" width="3" height="3" rx="0.5" fill="#2563eb"/>
     <rect x="12" y="14" width="3" height="3" rx="0.5" fill="#2563eb"/>
     <rect x="16" y="14" width="3" height="3" rx="0.5" fill="#2563eb"/>
+    <rect x="4" y="18" width="3" height="3" rx="0.5" fill="#2563eb"/>
+    <rect x="8" y="18" width="3" height="3" rx="0.5" fill="#2563eb"/>
+    <rect x="12" y="18" width="3" height="3" rx="0.5" fill="#2563eb"/>
+    <rect x="16" y="18" width="3" height="3" rx="0.5" fill="#2563eb"/>
+    <rect x="4" y="22" width="3" height="3" rx="0.5" fill="#2563eb"/>
+    <rect x="8" y="22" width="3" height="3" rx="0.5" fill="#2563eb"/>
+    <rect x="12" y="22" width="3" height="3" rx="0.5" fill="#2563eb"/>
+    <rect x="16" y="22" width="3" height="3" rx="0.5" fill="#2563eb"/>
   </g>
 </svg>
