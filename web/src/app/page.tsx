@@ -8,7 +8,6 @@ import {
   BrainIcon,
   BookOpenIcon,
   UsersIcon,
-  SparklesIcon,
   GlobeIcon,
   TrendingUpIcon,
   MessageSquareIcon,
@@ -74,11 +73,6 @@ export default async function Home() {
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMwMDAiIGZpbGwtb3BhY2l0eT0iMC4wMiI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-50" />
 
           <div className="container relative mx-auto max-w-5xl text-center">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-1.5 text-sm text-blue-700 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300">
-              <SparklesIcon className="h-4 w-4" />
-              <span>Validated with 2,000 students in Kédougou, Senegal</span>
-            </div>
-
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl md:text-6xl lg:text-7xl">
               Every student deserves a{' '}
               <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
@@ -128,8 +122,8 @@ export default async function Home() {
                   Teacher Burnout
                 </h3>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  Educators spend 40% of their time on administrative overhead—grading,
-                  planning, compliance—rather than actual instruction.
+                  Educators spend 40% of their time on administrative overhead (grading,
+                  planning, compliance) rather than actual instruction.
                 </p>
               </div>
 
@@ -198,7 +192,7 @@ export default async function Home() {
                   <h3 className="font-semibold text-gray-900 dark:text-white">Linguistic Memory (RAG)</h3>
                   <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
                     The system remembers the curriculum and the student&apos;s history,
-                    ensuring help is always context-aware. No hallucinations—just accurate
+                    ensuring help is always context-aware. No hallucinations, just accurate
                     information grounded in actual course materials.
                   </p>
                 </div>
@@ -243,7 +237,7 @@ export default async function Home() {
               </h2>
               <p className="mx-auto mt-4 max-w-2xl text-gray-600 dark:text-gray-400">
                 Our pilot with 2,000 students in Kédougou, Senegal demonstrated massive
-                improvements in learning outcomes—proving AI-powered tutoring transforms
+                improvements in learning outcomes, proving AI-powered tutoring transforms
                 education in underserved communities.
               </p>
             </div>
@@ -270,7 +264,7 @@ export default async function Home() {
                   Resilient Connectivity
                 </h3>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  Designed to work on fluctuating signals—ensuring the Global South and
+                  Designed to work on fluctuating signals, ensuring the Global South and
                   Rural US have the same experience as Seattle.
                 </p>
               </div>
@@ -299,7 +293,7 @@ export default async function Home() {
                 Why Now?
               </h2>
               <p className="mx-auto mt-4 max-w-2xl text-gray-600 dark:text-gray-400">
-                We&apos;re at the inflection point where AI isn&apos;t a luxury—it&apos;s the new utility.
+                We&apos;re at the inflection point where AI isn&apos;t a luxury. It&apos;s the new utility.
               </p>
             </div>
 
