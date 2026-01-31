@@ -7,14 +7,11 @@ import { SetupDemoButton } from '@/components/setup-demo-button'
 import {
   BrainIcon,
   BookOpenIcon,
-  UsersIcon,
-  TrendingUpIcon,
   ClockIcon,
-  FileTextIcon,
-  ZapIcon,
-  BanIcon,
+  UsersIcon,
   GraduationCapIcon,
-  DatabaseIcon,
+  MessageCircleQuestionIcon,
+  BarChart3Icon,
 } from 'lucide-react'
 
 export default async function Home() {
@@ -51,9 +48,9 @@ export default async function Home() {
             <span className="text-xl font-bold text-gray-900 dark:text-white">EduNex</span>
           </Link>
           <nav className="hidden items-center gap-8 md:flex">
-            <a href="#problem" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">Problem</a>
-            <a href="#solution" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">Solution</a>
-            <a href="#why-now" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">Why Now</a>
+            <a href="#for-students" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">For Students</a>
+            <a href="#for-teachers" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">For Teachers</a>
+            <a href="#how-it-works" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">How It Works</a>
           </nav>
           <div className="flex items-center gap-3">
             <Link href="mailto:contact@edunexlms.com">
@@ -70,33 +67,27 @@ export default async function Home() {
         {/* Hero Section */}
         <section className="relative overflow-hidden px-4 py-20 md:py-32">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-blue-950/20 dark:via-gray-950 dark:to-indigo-950/20" />
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMwMDAiIGZpbGwtb3BhY2l0eT0iMC4wMiI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-50" />
 
           <div className="container relative mx-auto max-w-5xl text-center">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl md:text-6xl lg:text-7xl">
-              AI tutoring that{' '}
+              A personal tutor for{' '}
               <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                actually teaches
+                every student
               </span>
             </h1>
 
             <p className="mx-auto mt-6 max-w-3xl text-lg text-gray-600 dark:text-gray-400 md:text-xl">
-              Every student gets a personal AI tutor that asks questions instead of giving answers.
-              Every teacher gets an assistant that handles the busywork.
-            </p>
-
-            <p className="mx-auto mt-4 max-w-2xl text-base text-gray-500 dark:text-gray-500">
-              Legacy systems store files and track grades. That&apos;s it.
-              We&apos;re not building a better filing cabinet. We&apos;re building the first system that actually teaches.
+              AI tutoring that asks questions instead of giving answers.
+              Students learn by thinking. Teachers get time back to teach.
             </p>
 
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link href="mailto:contact@edunexlms.com">
                 <Button size="lg" className="w-full bg-blue-600 px-8 hover:bg-blue-700 sm:w-auto">
-                  Contact Us
+                  Get in Touch
                 </Button>
               </Link>
-              <Link href="#solution">
+              <Link href="#how-it-works">
                 <Button size="lg" variant="outline" className="w-full sm:w-auto">
                   See How It Works
                 </Button>
@@ -105,211 +96,180 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Problem Section */}
-        <section id="problem" className="border-y bg-gray-50 px-4 py-16 dark:bg-gray-900/50 md:py-24">
-          <div className="container mx-auto max-w-5xl">
-            <div className="text-center">
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
-                The Current System Is Broken
-              </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-gray-600 dark:text-gray-400">
-                The current system was built to manage compliance, not to help students learn.
-              </p>
-            </div>
-
-            <div className="mt-12 grid gap-8 md:grid-cols-3">
-              <div className="rounded-2xl border bg-white p-8 shadow-sm dark:bg-gray-900">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900">
-                  <BanIcon className="h-6 w-6 text-red-600 dark:text-red-400" />
-                </div>
-                <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
-                  Schools Are Losing
-                </h3>
-                <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  Schools spend millions trying to &quot;detect&quot; and &quot;ban&quot; AI.
-                  Students use it anyway. The current approach isn&apos;t working.
-                </p>
-              </div>
-
-              <div className="rounded-2xl border bg-white p-8 shadow-sm dark:bg-gray-900">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900">
-                  <ClockIcon className="h-6 w-6 text-orange-600 dark:text-orange-400" />
-                </div>
-                <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
-                  Teachers Are Buried
-                </h3>
-                <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  Teachers spend 40% of their time on grading, planning, and compliance.
-                  They became teachers to teach, not to do paperwork.
-                </p>
-              </div>
-
-              <div className="rounded-2xl border bg-white p-8 shadow-sm dark:bg-gray-900">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
-                  <UsersIcon className="h-6 w-6 text-gray-600 dark:text-gray-400" />
-                </div>
-                <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
-                  Students Get Left Behind
-                </h3>
-                <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  In a class of 30, the middle gets taught, the top gets bored, and the bottom falls behind.
-                  One-size-fits-all doesn&apos;t fit anyone.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Solution Section */}
-        <section id="solution" className="px-4 py-16 md:py-24">
-          <div className="container mx-auto max-w-5xl">
-            <div className="text-center">
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
-                The 2-Sigma Solution
-              </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-gray-600 dark:text-gray-400">
-                In 1984, Benjamin Bloom proved that students with 1:1 tutoring perform 2 standard deviations better,
-                moving from the 50th to the 98th percentile. We can finally deliver that at scale.
-              </p>
-            </div>
-
-            {/* Cost Comparison */}
-            <div className="mx-auto mt-12 max-w-md rounded-2xl border bg-gradient-to-br from-blue-50 to-indigo-50 p-8 text-center dark:from-blue-950/30 dark:to-indigo-950/30">
-              <p className="text-sm font-medium uppercase tracking-wide text-blue-600 dark:text-blue-400">1,000x Cost Reduction</p>
-              <div className="mt-4 flex items-center justify-center gap-8">
-                <div>
-                  <p className="text-3xl font-bold text-gray-900 dark:text-white">$50/hr</p>
-                  <p className="text-sm text-gray-500">Human Tutor</p>
-                </div>
-                <div className="text-2xl text-gray-400">→</div>
-                <div>
-                  <p className="text-3xl font-bold text-blue-600">$0.05/hr</p>
-                  <p className="text-sm text-gray-500">AI Tutor</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-16 grid gap-8 md:grid-cols-2">
-              <div className="rounded-2xl border p-8">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900">
-                  <GraduationCapIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                </div>
-                <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">For Students</h3>
-                <p className="mt-2 text-gray-600 dark:text-gray-400">
-                  Get unstuck in seconds instead of hours. Help available 24/7.
-                  ChatGPT gives answers. EduNex asks questions. That&apos;s the difference between a shortcut and learning.
-                </p>
-              </div>
-
-              <div className="rounded-2xl border p-8">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900">
-                  <BookOpenIcon className="h-5 w-5 text-green-600 dark:text-green-400" />
-                </div>
-                <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">For Teachers</h3>
-                <p className="mt-2 text-gray-600 dark:text-gray-400">
-                  Cut grading time by 80%. See exactly where students struggle.
-                  Focus on high-value human mentorship, not paperwork.
-                </p>
-              </div>
-            </div>
-
-            {/* Product Features */}
-            <div className="mt-16 grid gap-6 md:grid-cols-3">
-              <div className="flex gap-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900">
-                  <BrainIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">Dedicated AI for Each Course</h3>
-                  <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Not a generic chatbot. Each tutor reads your textbook, knows your assignments, and pulls examples from your actual course materials.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-orange-100 dark:bg-orange-900">
-                  <FileTextIcon className="h-5 w-5 text-orange-600 dark:text-orange-400" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">Connected to Everything</h3>
-                  <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    The tutor sees your quiz results, knows your history, and understands exactly where you&apos;re stuck. Always context-aware.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-teal-100 dark:bg-teal-900">
-                  <ZapIcon className="h-5 w-5 text-teal-600 dark:text-teal-400" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">Works While You Sleep</h3>
-                  <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Your tutor builds lesson plans and practice problems overnight. When you show up, your personalized content is ready.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Differentiator Section */}
+        {/* 2-Sigma Section */}
         <section className="border-y bg-gray-50 px-4 py-16 dark:bg-gray-900/50 md:py-24">
-          <div className="container mx-auto max-w-3xl text-center">
+          <div className="container mx-auto max-w-4xl text-center">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
-              Built Different
+              The 2-Sigma Advantage
             </h2>
-            <p className="mx-auto mt-6 text-lg text-gray-600 dark:text-gray-400">
-              Legacy systems bolt AI onto 20-year-old file storage.
-              They can summarize a document, but they can&apos;t teach.
+            <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-600 dark:text-gray-400">
+              Benjamin Bloom&apos;s research showed that students with 1:1 tutoring perform two standard deviations better than classroom instruction alone, moving from the 50th to the 98th percentile.
             </p>
-            <p className="mx-auto mt-4 text-lg font-medium text-gray-900 dark:text-white">
-              Their AI gives answers. Ours asks questions.
-            </p>
-            <p className="mt-2 text-gray-500 dark:text-gray-400">
-              That&apos;s the difference between a shortcut and learning.
+            <p className="mx-auto mt-4 max-w-2xl text-lg font-medium text-gray-900 dark:text-white">
+              EduNex brings that level of personalized support to every student in your institution.
             </p>
           </div>
         </section>
 
-        {/* Why Now Section */}
-        <section id="why-now" className="px-4 py-16 md:py-24">
+        {/* For Students Section */}
+        <section id="for-students" className="px-4 py-16 md:py-24">
+          <div className="container mx-auto max-w-5xl">
+            <div className="grid items-center gap-12 md:grid-cols-2">
+              <div>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
+                  For Students
+                </h2>
+                <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
+                  A tutor that&apos;s always available, always patient, and always focused on helping them understand.
+                </p>
+                <ul className="mt-8 space-y-4">
+                  <li className="flex gap-3">
+                    <MessageCircleQuestionIcon className="h-6 w-6 shrink-0 text-blue-600" />
+                    <div>
+                      <p className="font-medium text-gray-900 dark:text-white">Learns through questions</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">The tutor guides students to answers through the Socratic method, building real understanding.</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-3">
+                    <ClockIcon className="h-6 w-6 shrink-0 text-blue-600" />
+                    <div>
+                      <p className="font-medium text-gray-900 dark:text-white">Help when they need it</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Available 24/7. Students get unstuck in seconds, not days.</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-3">
+                    <BookOpenIcon className="h-6 w-6 shrink-0 text-blue-600" />
+                    <div>
+                      <p className="font-medium text-gray-900 dark:text-white">Grounded in course materials</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Every answer comes from your curriculum. No hallucinations, no off-topic tangents.</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div className="rounded-2xl border bg-gradient-to-br from-blue-50 to-indigo-50 p-8 dark:from-blue-950/30 dark:to-indigo-950/30">
+                <div className="flex items-start gap-3">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-medium text-white">S</div>
+                  <div className="rounded-2xl rounded-tl-none bg-white p-4 shadow-sm dark:bg-gray-900">
+                    <p className="text-sm text-gray-700 dark:text-gray-300">I don&apos;t understand why the derivative of sin(x) is cos(x).</p>
+                  </div>
+                </div>
+                <div className="mt-4 flex items-start gap-3">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-sm font-medium text-white">AI</div>
+                  <div className="rounded-2xl rounded-tl-none bg-white p-4 shadow-sm dark:bg-gray-900">
+                    <p className="text-sm text-gray-700 dark:text-gray-300">Good question. Let&apos;s think about what a derivative measures. When x increases by a tiny amount, what happens to sin(x)? Try sketching the sine curve and looking at its slope at different points.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* For Teachers Section */}
+        <section id="for-teachers" className="border-y bg-gray-50 px-4 py-16 dark:bg-gray-900/50 md:py-24">
+          <div className="container mx-auto max-w-5xl">
+            <div className="grid items-center gap-12 md:grid-cols-2">
+              <div className="order-2 md:order-1">
+                <div className="rounded-2xl border bg-white p-6 shadow-sm dark:bg-gray-900">
+                  <h4 className="font-medium text-gray-900 dark:text-white">Class Insights</h4>
+                  <p className="mt-1 text-sm text-gray-500">Where students are struggling this week</p>
+                  <div className="mt-4 space-y-3">
+                    <div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-700 dark:text-gray-300">Chain Rule Applications</span>
+                        <span className="text-red-600">23 students</span>
+                      </div>
+                      <div className="mt-1 h-2 rounded-full bg-gray-200 dark:bg-gray-700">
+                        <div className="h-2 w-3/4 rounded-full bg-red-500" />
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-700 dark:text-gray-300">Integration by Parts</span>
+                        <span className="text-orange-600">14 students</span>
+                      </div>
+                      <div className="mt-1 h-2 rounded-full bg-gray-200 dark:bg-gray-700">
+                        <div className="h-2 w-1/2 rounded-full bg-orange-500" />
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-700 dark:text-gray-300">Limit Definitions</span>
+                        <span className="text-yellow-600">8 students</span>
+                      </div>
+                      <div className="mt-1 h-2 rounded-full bg-gray-200 dark:bg-gray-700">
+                        <div className="h-2 w-1/4 rounded-full bg-yellow-500" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="order-1 md:order-2">
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
+                  For Teachers
+                </h2>
+                <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
+                  Spend less time on busywork. More time on what matters.
+                </p>
+                <ul className="mt-8 space-y-4">
+                  <li className="flex gap-3">
+                    <BarChart3Icon className="h-6 w-6 shrink-0 text-green-600" />
+                    <div>
+                      <p className="font-medium text-gray-900 dark:text-white">See where students struggle</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Real-time insights show exactly which concepts need more class time.</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-3">
+                    <ClockIcon className="h-6 w-6 shrink-0 text-green-600" />
+                    <div>
+                      <p className="font-medium text-gray-900 dark:text-white">Reduce grading time</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">AI-assisted grading with detailed feedback suggestions.</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-3">
+                    <UsersIcon className="h-6 w-6 shrink-0 text-green-600" />
+                    <div>
+                      <p className="font-medium text-gray-900 dark:text-white">Focus on mentorship</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">When routine questions are handled, you can focus on the students who need you most.</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* How It Works Section */}
+        <section id="how-it-works" className="px-4 py-16 md:py-24">
           <div className="container mx-auto max-w-5xl">
             <div className="text-center">
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
-                Why Now?
+                How It Works
               </h2>
+              <p className="mx-auto mt-4 max-w-2xl text-gray-600 dark:text-gray-400">
+                Each course gets a dedicated AI tutor trained on your specific curriculum.
+              </p>
             </div>
 
             <div className="mt-12 grid gap-8 md:grid-cols-3">
-              <div className="rounded-2xl border p-8 text-center">
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900">
-                  <BrainIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                </div>
-                <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">AI Just Got Good Enough</h3>
+              <div className="text-center">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-xl font-bold text-blue-600 dark:bg-blue-900 dark:text-blue-400">1</div>
+                <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">Upload Your Materials</h3>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  Two years ago this wasn&apos;t possible. Now AI can actually teach, asking the right questions at the right time.
+                  Syllabi, textbooks, lecture notes, assignments. The tutor learns your course.
                 </p>
               </div>
-
-              <div className="rounded-2xl border p-8 text-center">
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
-                  <TrendingUpIcon className="h-6 w-6 text-green-600 dark:text-green-400" />
-                </div>
-                <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">Schools Need a New Approach</h3>
+              <div className="text-center">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-xl font-bold text-blue-600 dark:bg-blue-900 dark:text-blue-400">2</div>
+                <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">Students Get Access</h3>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  Banning AI failed. Schools are desperate for a way to use AI that helps students learn instead of cheat.
+                  Every student can ask questions anytime. The tutor guides them without giving away answers.
                 </p>
               </div>
-
-              <div className="rounded-2xl border p-8 text-center">
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900">
-                  <DatabaseIcon className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-                </div>
-                <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">We Get Smarter Every Day</h3>
+              <div className="text-center">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-xl font-bold text-blue-600 dark:bg-blue-900 dark:text-blue-400">3</div>
+                <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">Teachers See Insights</h3>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  Every tutoring session makes our system better. Traditional LMS companies can&apos;t catch up. They don&apos;t have the data.
+                  Dashboards show what students are asking about and where they&apos;re getting stuck.
                 </p>
               </div>
             </div>
@@ -321,15 +281,15 @@ export default async function Home() {
           <div className="container mx-auto max-w-4xl">
             <div className="rounded-3xl bg-gradient-to-r from-blue-600 to-indigo-600 p-8 text-center md:p-16">
               <h2 className="text-3xl font-bold text-white md:text-4xl">
-                From Digital Storage to AI-Native Learning
+                Ready to give every student a tutor?
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-blue-100">
-                Replace the digital filing cabinet with software that actually helps students learn.
+                Let&apos;s talk about how EduNex can work for your institution.
               </p>
               <div className="mt-8">
                 <Link href="mailto:contact@edunexlms.com">
                   <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50">
-                    Contact Us
+                    Get in Touch
                   </Button>
                 </Link>
               </div>
@@ -370,14 +330,14 @@ export default async function Home() {
               <span className="text-xl font-bold text-gray-900 dark:text-white">EduNex</span>
             </Link>
             <div className="flex gap-8 text-sm text-gray-600 dark:text-gray-400">
-              <a href="#problem" className="hover:text-gray-900 dark:hover:text-white">Problem</a>
-              <a href="#solution" className="hover:text-gray-900 dark:hover:text-white">Solution</a>
-              <a href="#why-now" className="hover:text-gray-900 dark:hover:text-white">Why Now</a>
+              <a href="#for-students" className="hover:text-gray-900 dark:hover:text-white">For Students</a>
+              <a href="#for-teachers" className="hover:text-gray-900 dark:hover:text-white">For Teachers</a>
+              <a href="#how-it-works" className="hover:text-gray-900 dark:hover:text-white">How It Works</a>
               <a href="mailto:contact@edunexlms.com" className="hover:text-gray-900 dark:hover:text-white">Contact</a>
             </div>
           </div>
           <div className="mt-8 border-t pt-8 text-center text-sm text-gray-500 dark:text-gray-400">
-            &copy; {new Date().getFullYear()} EduNex. AI tutoring that actually teaches.
+            &copy; {new Date().getFullYear()} EduNex
           </div>
         </div>
       </footer>
