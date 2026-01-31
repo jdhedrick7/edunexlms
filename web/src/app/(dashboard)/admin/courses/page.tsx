@@ -83,6 +83,13 @@ export default function AdminCoursesPage() {
   const [teachers, setTeachers] = useState<MemberWithUser[]>([])
   const [loadingTeachers, setLoadingTeachers] = useState(false)
 
+  // Assign teacher dialog state
+  const [showAssignDialog, setShowAssignDialog] = useState(false)
+  const [assigningCourse, setAssigningCourse] = useState<CourseWithStats | null>(null)
+  const [assignTeacherId, setAssignTeacherId] = useState<string>('')
+  const [assigning, setAssigning] = useState(false)
+  const [assignError, setAssignError] = useState<string | null>(null)
+
   const loadCourses = useCallback(async () => {
     setLoading(true)
     setError(null)
@@ -192,6 +199,52 @@ export default function AdminCoursesPage() {
     setShowCreateDialog(true)
   }
 
+  function openAssignDialog(course: CourseWithStats) {
+    setAssigningCourse(course)
+    setAssignTeacherId('')
+    setAssignError(null)
+    setShowAssignDialog(true)
+  }
+
+  async function handleAssignTeacher(e: React.FormEvent) {
+    e.preventDefault()
+    if (!assigningCourse || !assignTeacherId || assignTeacherId === 'none') return
+
+    setAssigning(true)
+    setAssignError(null)
+
+    const response = await fetch(`/api/admin/courses/${assigningCourse.id}/teachers`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ teacherId: assignTeacherId }),
+    })
+
+    if (!response.ok) {
+      const data = await response.json()
+      setAssignError(data.error || 'Failed to assign teacher')
+    } else {
+      setShowAssignDialog(false)
+      setAssigningCourse(null)
+      setAssignTeacherId('')
+      loadCourses()
+    }
+
+    setAssigning(false)
+  }
+
+  async function handleRemoveTeacher(courseId: string, teacherId: string) {
+    const response = await fetch(`/api/admin/courses/${courseId}/teachers?teacherId=${teacherId}`, {
+      method: 'DELETE',
+    })
+
+    if (response.ok) {
+      loadCourses()
+    } else {
+      const data = await response.json()
+      setError(data.error || 'Failed to remove teacher')
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -245,6 +298,7 @@ export default function AdminCoursesPage() {
                     <TableHead>Students</TableHead>
                     <TableHead>TAs</TableHead>
                     <TableHead>Created</TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -255,10 +309,24 @@ export default function AdminCoursesPage() {
                       </TableCell>
                       <TableCell className="font-medium">{course.name}</TableCell>
                       <TableCell>
-                        {course.teachers.length > 0
-                          ? course.teachers.map(t => t.full_name || t.email).join(', ')
-                          : <span className="text-muted-foreground">No teacher assigned</span>
-                        }
+                        {course.teachers.length > 0 ? (
+                          <div className="flex flex-wrap gap-1">
+                            {course.teachers.map(t => (
+                              <Badge key={t.id} variant="secondary" className="gap-1">
+                                {t.full_name || t.email}
+                                <button
+                                  onClick={() => handleRemoveTeacher(course.id, t.id)}
+                                  className="ml-1 hover:text-destructive"
+                                  title="Remove teacher"
+                                >
+                                  &times;
+                                </button>
+                              </Badge>
+                            ))}
+                          </div>
+                        ) : (
+                          <span className="text-muted-foreground">No teacher assigned</span>
+                        )}
                       </TableCell>
                       <TableCell>{course.studentCount}</TableCell>
                       <TableCell>{course.taCount}</TableCell>
@@ -266,6 +334,15 @@ export default function AdminCoursesPage() {
                         {course.created_at
                           ? new Date(course.created_at).toLocaleDateString()
                           : 'N/A'}
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => openAssignDialog(course)}
+                        >
+                          Assign Teacher
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -388,6 +465,64 @@ export default function AdminCoursesPage() {
               </Button>
               <Button type="submit" disabled={creating}>
                 {creating ? 'Creating...' : 'Create Course'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Assign Teacher Dialog */}
+      <Dialog open={showAssignDialog} onOpenChange={setShowAssignDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Assign Teacher</DialogTitle>
+            <DialogDescription>
+              {assigningCourse && (
+                <>Assign a teacher to <strong>{assigningCourse.code}: {assigningCourse.name}</strong></>
+              )}
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleAssignTeacher}>
+            <div className="space-y-4 py-4">
+              {assignError && (
+                <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
+                  {assignError}
+                </div>
+              )}
+              <div className="space-y-2">
+                <Label htmlFor="assign-teacher">Select Teacher</Label>
+                <Select
+                  value={assignTeacherId}
+                  onValueChange={setAssignTeacherId}
+                  disabled={assigning || loadingTeachers}
+                >
+                  <SelectTrigger id="assign-teacher">
+                    <SelectValue placeholder="Select a teacher" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">Select a teacher...</SelectItem>
+                    {teachers
+                      .filter(t => !assigningCourse?.teachers.some(ct => ct.id === t.user_id))
+                      .map((teacher) => (
+                        <SelectItem key={teacher.user_id} value={teacher.user_id}>
+                          {teacher.user?.full_name || teacher.user?.email}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+                {teachers.length === 0 && !loadingTeachers && (
+                  <p className="text-xs text-muted-foreground">
+                    No teachers available. Add users with the teacher role first.
+                  </p>
+                )}
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setShowAssignDialog(false)}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={assigning || !assignTeacherId || assignTeacherId === 'none'}>
+                {assigning ? 'Assigning...' : 'Assign Teacher'}
               </Button>
             </DialogFooter>
           </form>
