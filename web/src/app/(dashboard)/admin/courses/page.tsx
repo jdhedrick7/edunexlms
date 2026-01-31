@@ -167,7 +167,7 @@ export default function AdminCoursesPage() {
         code: courseCode,
         name: courseName,
         description: courseDescription || null,
-        teacherId: selectedTeacher || undefined,
+        teacherId: selectedTeacher && selectedTeacher !== 'none' ? selectedTeacher : undefined,
       }),
     })
 
@@ -367,7 +367,7 @@ export default function AdminCoursesPage() {
                     <SelectValue placeholder="Select a teacher" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">No teacher</SelectItem>
+                    <SelectItem value="none">No teacher</SelectItem>
                     {teachers.map((teacher) => (
                       <SelectItem key={teacher.user_id} value={teacher.user_id}>
                         {teacher.user?.full_name || teacher.user?.email}
