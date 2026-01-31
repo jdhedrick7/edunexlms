@@ -86,7 +86,7 @@ export default async function Home() {
             </p>
 
             <p className="mx-auto mt-4 max-w-2xl text-base text-gray-500 dark:text-gray-500">
-              Canvas, Blackboard, and Moodle store files and track grades. That&apos;s it.
+              Legacy systems store files and track grades. That&apos;s it.
               We&apos;re not building a better filing cabinet. We&apos;re building the first system that actually teaches.
             </p>
 
@@ -254,14 +254,14 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Competitive Section */}
+        {/* Differentiator Section */}
         <section className="border-y bg-gray-50 px-4 py-16 dark:bg-gray-900/50 md:py-24">
           <div className="container mx-auto max-w-3xl text-center">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
-              The Gap
+              Built Different
             </h2>
             <p className="mx-auto mt-6 text-lg text-gray-600 dark:text-gray-400">
-              Canvas and Blackboard bolt AI onto 20-year-old file storage systems.
+              Legacy systems bolt AI onto 20-year-old file storage.
               They can summarize a document, but they can&apos;t teach.
             </p>
             <p className="mx-auto mt-4 text-lg font-medium text-gray-900 dark:text-white">
