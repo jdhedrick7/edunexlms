@@ -243,33 +243,48 @@ export default async function Home() {
           <div className="container mx-auto max-w-5xl">
             <div className="text-center">
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
-                How It Works
+                A Complete Learning Platform
               </h2>
               <p className="mx-auto mt-4 max-w-2xl text-gray-600 dark:text-gray-400">
-                Each course gets a dedicated AI tutor trained on your specific curriculum.
+                EduNex is a full learning management system with AI tutoring built in from the start.
               </p>
             </div>
 
-            <div className="mt-12 grid gap-8 md:grid-cols-3">
-              <div className="text-center">
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-xl font-bold text-blue-600 dark:bg-blue-900 dark:text-blue-400">1</div>
-                <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">Upload Your Materials</h3>
+            <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+              <div className="rounded-xl border bg-white p-6 dark:bg-gray-900">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900">
+                  <BookOpenIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                </div>
+                <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">Course Management</h3>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  Syllabi, textbooks, lecture notes, assignments. The tutor learns your course.
+                  Create courses, organize modules, upload materials, manage enrollments.
                 </p>
               </div>
-              <div className="text-center">
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-xl font-bold text-blue-600 dark:bg-blue-900 dark:text-blue-400">2</div>
-                <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">Students Get Access</h3>
+              <div className="rounded-xl border bg-white p-6 dark:bg-gray-900">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900">
+                  <GraduationCapIcon className="h-5 w-5 text-green-600 dark:text-green-400" />
+                </div>
+                <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">Assignments & Grading</h3>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  Every student can ask questions anytime. The tutor guides them without giving away answers.
+                  Quizzes, assignments, and assessments with AI-assisted grading and feedback.
                 </p>
               </div>
-              <div className="text-center">
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-xl font-bold text-blue-600 dark:bg-blue-900 dark:text-blue-400">3</div>
-                <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">Teachers See Insights</h3>
+              <div className="rounded-xl border bg-white p-6 dark:bg-gray-900">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900">
+                  <BrainIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                </div>
+                <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">AI Tutor per Course</h3>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  Dashboards show what students are asking about and where they&apos;re getting stuck.
+                  Each course gets a dedicated tutor trained on your curriculum and materials.
+                </p>
+              </div>
+              <div className="rounded-xl border bg-white p-6 dark:bg-gray-900">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-100 dark:bg-orange-900">
+                  <BarChart3Icon className="h-5 w-5 text-orange-600 dark:text-orange-400" />
+                </div>
+                <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">Analytics & Insights</h3>
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                  See where students struggle, track progress, and identify who needs extra help.
                 </p>
               </div>
             </div>
