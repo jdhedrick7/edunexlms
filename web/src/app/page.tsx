@@ -98,14 +98,101 @@ export default async function Home() {
 
         {/* 2-Sigma Section */}
         <section className="border-y bg-gray-50 px-4 py-16 dark:bg-gray-900/50 md:py-24">
-          <div className="container mx-auto max-w-4xl text-center">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
-              The 2-Sigma Advantage
-            </h2>
-            <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-600 dark:text-gray-400">
-              Benjamin Bloom&apos;s research showed that students with 1:1 tutoring perform two standard deviations better than classroom instruction alone, moving from the 50th to the 98th percentile.
-            </p>
-            <p className="mx-auto mt-4 max-w-2xl text-lg font-medium text-gray-900 dark:text-white">
+          <div className="container mx-auto max-w-5xl">
+            <div className="text-center">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
+                The 2-Sigma Advantage
+              </h2>
+              <p className="mx-auto mt-4 max-w-2xl text-gray-600 dark:text-gray-400">
+                Benjamin Bloom&apos;s research proved that 1:1 tutoring moves students two standard deviations above the average.
+              </p>
+            </div>
+
+            {/* Normal Distribution Graphic */}
+            <div className="mx-auto mt-12 max-w-3xl">
+              <div className="rounded-2xl border bg-white p-6 shadow-sm dark:bg-gray-900 md:p-8">
+                <svg viewBox="0 0 400 200" className="w-full" aria-label="Normal distribution showing 2-sigma improvement">
+                  {/* Grid lines */}
+                  <line x1="50" y1="150" x2="350" y2="150" stroke="currentColor" strokeOpacity="0.2" strokeWidth="1" />
+
+                  {/* Normal distribution curve */}
+                  <path
+                    d="M 50 150
+                       Q 80 148, 100 140
+                       Q 130 120, 150 90
+                       Q 170 55, 200 45
+                       Q 230 55, 250 90
+                       Q 270 120, 300 140
+                       Q 320 148, 350 150"
+                    fill="url(#curveGradient)"
+                    stroke="#3b82f6"
+                    strokeWidth="2"
+                  />
+
+                  {/* Gradient definition */}
+                  <defs>
+                    <linearGradient id="curveGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.3" />
+                      <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.05" />
+                    </linearGradient>
+                  </defs>
+
+                  {/* 50th percentile marker (center) */}
+                  <line x1="200" y1="45" x2="200" y2="155" stroke="#94a3b8" strokeWidth="2" strokeDasharray="4" />
+                  <circle cx="200" cy="45" r="6" fill="#94a3b8" />
+
+                  {/* 98th percentile marker (+2 sigma) */}
+                  <line x1="300" y1="140" x2="300" y2="155" stroke="#10b981" strokeWidth="2" />
+                  <circle cx="300" cy="140" r="8" fill="#10b981" />
+
+                  {/* Arrow showing movement */}
+                  <path
+                    d="M 210 60 Q 255 40, 290 130"
+                    fill="none"
+                    stroke="#10b981"
+                    strokeWidth="2"
+                    strokeDasharray="6"
+                    markerEnd="url(#arrowhead)"
+                  />
+                  <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                      <polygon points="0 0, 10 3.5, 0 7" fill="#10b981" />
+                    </marker>
+                  </defs>
+
+                  {/* Labels */}
+                  <text x="200" y="175" textAnchor="middle" className="fill-gray-500 text-xs">50th percentile</text>
+                  <text x="200" y="188" textAnchor="middle" className="fill-gray-400 text-xs">(average)</text>
+                  <text x="300" y="175" textAnchor="middle" className="fill-emerald-600 text-xs font-medium">98th percentile</text>
+                  <text x="300" y="188" textAnchor="middle" className="fill-emerald-500 text-xs">(+2 sigma)</text>
+
+                  {/* Sigma labels on curve */}
+                  <text x="255" y="35" textAnchor="middle" className="fill-emerald-600 text-xs font-medium">+2σ improvement</text>
+                </svg>
+
+                {/* Stats below */}
+                <div className="mt-6 grid grid-cols-2 gap-4 border-t pt-6 md:grid-cols-4">
+                  <div className="text-center">
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">50th</p>
+                    <p className="text-xs text-gray-500">Classroom Only</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-2xl font-bold text-blue-600">→</p>
+                    <p className="text-xs text-gray-500">With 1:1 Tutoring</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-2xl font-bold text-emerald-600">98th</p>
+                    <p className="text-xs text-gray-500">Percentile</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">1984</p>
+                    <p className="text-xs text-gray-500">Bloom&apos;s Research</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p className="mx-auto mt-8 max-w-2xl text-center text-lg font-medium text-gray-900 dark:text-white">
               EduNex brings that level of personalized support to every student in your institution.
             </p>
           </div>
