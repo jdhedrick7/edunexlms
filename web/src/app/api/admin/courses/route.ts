@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 export async function GET(request: NextRequest) {
   const supabase = await createClient()
@@ -134,6 +135,30 @@ export async function POST(request: NextRequest) {
 
   if (existingCourse) {
     return NextResponse.json({ error: 'A course with this code already exists' }, { status: 409 })
+  }
+
+  // Ensure storage bucket exists for this institution
+  const bucketId = `inst-${institutionId}`
+  const adminClient = createAdminClient()
+
+  const { data: buckets } = await adminClient.storage.listBuckets()
+  const bucketExists = buckets?.some(b => b.name === bucketId)
+
+  if (!bucketExists) {
+    const { error: bucketError } = await adminClient.storage.createBucket(bucketId, {
+      public: false,
+      fileSizeLimit: 52428800, // 50MB
+      allowedMimeTypes: [
+        'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml',
+        'application/pdf', 'application/json', 'text/plain', 'text/markdown',
+        'application/zip', 'video/mp4', 'audio/mpeg'
+      ],
+    })
+
+    if (bucketError) {
+      console.error('Failed to create bucket:', bucketError)
+      // Continue anyway - bucket might already exist or uploads will fail gracefully
+    }
   }
 
   // Create the course

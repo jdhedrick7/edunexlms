@@ -2,8 +2,9 @@ import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
-import { ArrowLeftIcon } from 'lucide-react'
+import { ArrowLeftIcon, DownloadIcon } from 'lucide-react'
 import { VersionList } from '@/components/course/version-list'
+import { CourseUpload } from '@/components/course/course-upload'
 
 interface VersionsPageProps {
   params: Promise<{ courseId: string }>
@@ -69,13 +70,24 @@ export default async function VersionsPage({ params }: VersionsPageProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4">
+      <div className="flex items-center justify-between">
         <Link href={`/courses/${courseId}`}>
           <Button variant="ghost" size="sm">
             <ArrowLeftIcon className="h-4 w-4 mr-2" />
             Back to Course
           </Button>
         </Link>
+        <div className="flex items-center gap-2">
+          {course.published_version_id && (
+            <a href={`/api/courses/${courseId}/download`} download>
+              <Button variant="outline" size="sm">
+                <DownloadIcon className="h-4 w-4 mr-2" />
+                Download Published
+              </Button>
+            </a>
+          )}
+          <CourseUpload courseId={courseId} />
+        </div>
       </div>
 
       <div>
