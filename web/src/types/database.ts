@@ -643,6 +643,7 @@ export type Database = {
         Row: {
           created_at: string | null
           id: string
+          logo_url: string | null
           name: string
           settings: Json | null
           slug: string
@@ -651,6 +652,7 @@ export type Database = {
         Insert: {
           created_at?: string | null
           id?: string
+          logo_url?: string | null
           name: string
           settings?: Json | null
           slug: string
@@ -659,6 +661,7 @@ export type Database = {
         Update: {
           created_at?: string | null
           id?: string
+          logo_url?: string | null
           name?: string
           settings?: Json | null
           slug?: string

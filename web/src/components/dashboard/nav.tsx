@@ -117,39 +117,41 @@ export function DashboardNav({ isTeacherOrTA = false, isAdmin = false }: Dashboa
   return (
     <nav
       className={cn(
-        "hidden border-r bg-sidebar md:block transition-all duration-300 ease-in-out relative",
+        "hidden border-r bg-sidebar md:flex md:flex-col transition-all duration-300 ease-in-out h-[calc(100vh-3.5rem)]",
         isCollapsed ? "w-16" : "w-64"
       )}
     >
+      {/* Main nav items */}
+      <div className="flex-1 overflow-y-auto p-4">
+        <div className="flex flex-col gap-2">
+          {visibleNavItems.map((item) => {
+            const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
 
-      <div className="flex h-full flex-col gap-2 p-4">
-        {visibleNavItems.map((item) => {
-          const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
-
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              title={isCollapsed ? item.title : undefined}
-              className={cn(
-                'flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200',
-                isCollapsed ? 'justify-center' : 'gap-3',
-                isActive
-                  ? 'bg-primary text-primary-foreground'
-                  : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-              )}
-            >
-              <span className="flex-shrink-0">{item.icon}</span>
-              {!isCollapsed && (
-                <span className="truncate">{item.title}</span>
-              )}
-            </Link>
-          )
-        })}
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                title={isCollapsed ? item.title : undefined}
+                className={cn(
+                  'flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200',
+                  isCollapsed ? 'justify-center' : 'gap-3',
+                  isActive
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                )}
+              >
+                <span className="flex-shrink-0">{item.icon}</span>
+                {!isCollapsed && (
+                  <span className="truncate">{item.title}</span>
+                )}
+              </Link>
+            )
+          })}
+        </div>
       </div>
 
       {/* Settings and Collapse Toggle at bottom */}
-      <div className="absolute bottom-4 left-0 right-0 px-4 space-y-2">
+      <div className="flex-shrink-0 border-t p-4 space-y-2">
         <Link
           href="/settings"
           title={isCollapsed ? 'Settings' : undefined}

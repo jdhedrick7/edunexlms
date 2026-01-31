@@ -193,7 +193,7 @@ export default async function AdminPage() {
       </div>
 
       {/* Quick Links */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader>
             <CardTitle>User Management</CardTitle>
@@ -218,6 +218,20 @@ export default async function AdminPage() {
           <CardContent>
             <Link href="/admin/courses">
               <Button className="w-full">Manage Courses</Button>
+            </Link>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Institution Settings</CardTitle>
+            <CardDescription>
+              Customize branding and institution details
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link href="/admin/settings">
+              <Button className="w-full">Settings</Button>
             </Link>
           </CardContent>
         </Card>
