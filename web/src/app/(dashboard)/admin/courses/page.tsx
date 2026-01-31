@@ -90,6 +90,16 @@ export default function AdminCoursesPage() {
   const [assigning, setAssigning] = useState(false)
   const [assignError, setAssignError] = useState<string | null>(null)
 
+  // Students management state
+  const [students, setStudents] = useState<MemberWithUser[]>([])
+  const [loadingStudents, setLoadingStudents] = useState(false)
+  const [showStudentsDialog, setShowStudentsDialog] = useState(false)
+  const [managingCourse, setManagingCourse] = useState<CourseWithStats | null>(null)
+  const [courseStudents, setCourseStudents] = useState<User[]>([])
+  const [assignStudentId, setAssignStudentId] = useState<string>('')
+  const [assigningStudent, setAssigningStudent] = useState(false)
+  const [studentError, setStudentError] = useState<string | null>(null)
+
   const loadCourses = useCallback(async () => {
     setLoading(true)
     setError(null)
@@ -132,6 +142,19 @@ export default function AdminCoursesPage() {
     setLoadingTeachers(false)
   }, [])
 
+  const loadStudents = useCallback(async () => {
+    setLoadingStudents(true)
+
+    const response = await fetch('/api/admin/users?role=student&limit=500')
+
+    if (response.ok) {
+      const data = await response.json()
+      setStudents(data.members)
+    }
+
+    setLoadingStudents(false)
+  }, [])
+
   useEffect(() => {
     // Check if user is admin
     async function checkAdmin() {
@@ -157,10 +180,11 @@ export default function AdminCoursesPage() {
 
       loadCourses()
       loadTeachers()
+      loadStudents()
     }
 
     checkAdmin()
-  }, [router, loadCourses, loadTeachers])
+  }, [router, loadCourses, loadTeachers, loadStudents])
 
   async function handleCreateCourse(e: React.FormEvent) {
     e.preventDefault()
@@ -242,6 +266,66 @@ export default function AdminCoursesPage() {
     } else {
       const data = await response.json()
       setError(data.error || 'Failed to remove teacher')
+    }
+  }
+
+  async function openStudentsDialog(course: CourseWithStats) {
+    setManagingCourse(course)
+    setAssignStudentId('')
+    setStudentError(null)
+    setShowStudentsDialog(true)
+
+    // Load current students for this course
+    const response = await fetch(`/api/admin/courses/${course.id}/students`)
+    if (response.ok) {
+      const data = await response.json()
+      setCourseStudents(data.students)
+    }
+  }
+
+  async function handleAssignStudent(e: React.FormEvent) {
+    e.preventDefault()
+    if (!managingCourse || !assignStudentId || assignStudentId === 'none') return
+
+    setAssigningStudent(true)
+    setStudentError(null)
+
+    const response = await fetch(`/api/admin/courses/${managingCourse.id}/students`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ studentId: assignStudentId }),
+    })
+
+    if (!response.ok) {
+      const data = await response.json()
+      setStudentError(data.error || 'Failed to enroll student')
+    } else {
+      setAssignStudentId('')
+      // Refresh course students
+      const refreshResponse = await fetch(`/api/admin/courses/${managingCourse.id}/students`)
+      if (refreshResponse.ok) {
+        const data = await refreshResponse.json()
+        setCourseStudents(data.students)
+      }
+      loadCourses()
+    }
+
+    setAssigningStudent(false)
+  }
+
+  async function handleRemoveStudent(studentId: string) {
+    if (!managingCourse) return
+
+    const response = await fetch(`/api/admin/courses/${managingCourse.id}/students?studentId=${studentId}`, {
+      method: 'DELETE',
+    })
+
+    if (response.ok) {
+      setCourseStudents(prev => prev.filter(s => s.id !== studentId))
+      loadCourses()
+    } else {
+      const data = await response.json()
+      setStudentError(data.error || 'Failed to remove student')
     }
   }
 
@@ -336,13 +420,22 @@ export default function AdminCoursesPage() {
                           : 'N/A'}
                       </TableCell>
                       <TableCell>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => openAssignDialog(course)}
-                        >
-                          Assign Teacher
-                        </Button>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => openAssignDialog(course)}
+                          >
+                            + Teacher
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => openStudentsDialog(course)}
+                          >
+                            Manage Students
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -526,6 +619,107 @@ export default function AdminCoursesPage() {
               </Button>
             </DialogFooter>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Manage Students Dialog */}
+      <Dialog open={showStudentsDialog} onOpenChange={setShowStudentsDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Manage Students</DialogTitle>
+            <DialogDescription>
+              {managingCourse && (
+                <>Manage students for <strong>{managingCourse.code}: {managingCourse.name}</strong></>
+              )}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            {studentError && (
+              <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
+                {studentError}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="ml-2"
+                  onClick={() => setStudentError(null)}
+                >
+                  Dismiss
+                </Button>
+              </div>
+            )}
+
+            {/* Add Student Form */}
+            <form onSubmit={handleAssignStudent} className="flex gap-2">
+              <div className="flex-1">
+                <Select
+                  value={assignStudentId}
+                  onValueChange={setAssignStudentId}
+                  disabled={assigningStudent || loadingStudents}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a student to enroll" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">Select a student...</SelectItem>
+                    {students
+                      .filter(s => !courseStudents.some(cs => cs.id === s.user_id))
+                      .map((student) => (
+                        <SelectItem key={student.user_id} value={student.user_id}>
+                          {student.user?.full_name || student.user?.email}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button type="submit" disabled={assigningStudent || !assignStudentId || assignStudentId === 'none'}>
+                {assigningStudent ? 'Adding...' : 'Add Student'}
+              </Button>
+            </form>
+
+            {students.length === 0 && !loadingStudents && (
+              <p className="text-sm text-muted-foreground">
+                No students available. Add users with the student role first.
+              </p>
+            )}
+
+            {/* Current Students List */}
+            <div className="border rounded-md">
+              <div className="p-3 border-b bg-muted/50">
+                <h4 className="font-medium">Enrolled Students ({courseStudents.length})</h4>
+              </div>
+              <div className="max-h-64 overflow-y-auto">
+                {courseStudents.length === 0 ? (
+                  <p className="p-4 text-sm text-muted-foreground text-center">
+                    No students enrolled yet
+                  </p>
+                ) : (
+                  <div className="divide-y">
+                    {courseStudents.map((student) => (
+                      <div key={student.id} className="flex items-center justify-between p-3">
+                        <div>
+                          <p className="font-medium">{student.full_name || 'Unknown'}</p>
+                          <p className="text-sm text-muted-foreground">{student.email}</p>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-destructive hover:text-destructive"
+                          onClick={() => handleRemoveStudent(student.id)}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowStudentsDialog(false)}>
+              Done
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
