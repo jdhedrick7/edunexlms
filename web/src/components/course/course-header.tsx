@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import type { Course, CourseVersion, EnrollmentRole } from '@/types/database'
-import { Settings, BookOpen, Megaphone, Users, FileText, BarChart3, GitBranch, GraduationCap } from 'lucide-react'
+import { Settings, BookOpen, Megaphone, Users, FileText, BarChart3, GitBranch, GraduationCap, PenToolIcon } from 'lucide-react'
 
 interface CourseHeaderProps {
   course: Course & {
@@ -80,12 +80,20 @@ export function CourseHeader({ course, enrollment, latestDraftVersion }: CourseH
 
   // Teacher-only tabs
   if (enrollment.role === 'teacher') {
-    tabs.push({
-      name: 'Versions',
-      href: `${baseUrl}/versions`,
-      icon: GitBranch,
-      active: pathname === `${baseUrl}/versions`,
-    })
+    tabs.push(
+      {
+        name: 'Builder',
+        href: `${baseUrl}/edit`,
+        icon: PenToolIcon,
+        active: pathname === `${baseUrl}/edit`,
+      },
+      {
+        name: 'Versions',
+        href: `${baseUrl}/versions`,
+        icon: GitBranch,
+        active: pathname === `${baseUrl}/versions`,
+      }
+    )
   }
 
   return (
