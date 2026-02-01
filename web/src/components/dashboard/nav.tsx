@@ -133,7 +133,7 @@ export function DashboardNav({ isTeacherOrTA = false, isAdmin = false }: Dashboa
                 href={item.href}
                 title={isCollapsed ? item.title : undefined}
                 className={cn(
-                  'flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200',
+                  'flex items-center px-3 py-2 text-sm font-medium transition-all duration-200',
                   isCollapsed ? 'justify-center' : 'gap-3',
                   isActive
                     ? 'bg-primary text-primary-foreground'
@@ -156,7 +156,7 @@ export function DashboardNav({ isTeacherOrTA = false, isAdmin = false }: Dashboa
           href="/settings"
           title={isCollapsed ? 'Settings' : undefined}
           className={cn(
-            'flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200',
+            'flex items-center px-3 py-2 text-sm font-medium transition-all duration-200',
             isCollapsed ? 'justify-center' : 'gap-3',
             pathname === '/settings'
               ? 'bg-primary text-primary-foreground'

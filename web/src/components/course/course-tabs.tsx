@@ -493,7 +493,7 @@ export function CourseTabs({
                       <Link
                         key={submission.id}
                         href={`${baseUrl}/gradebook/${submission.student.id}/${encodeURIComponent(submission.assignment_path)}`}
-                        className="flex items-center gap-4 py-3 hover:bg-muted/50 -mx-4 px-4 rounded transition-colors"
+                        className="flex items-center gap-4 py-3 hover:bg-muted/50 -mx-4 px-4 transition-colors"
                       >
                         <Avatar className="h-8 w-8">
                           <AvatarImage src={submission.student.avatar_url || undefined} />

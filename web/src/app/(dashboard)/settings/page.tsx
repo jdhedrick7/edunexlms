@@ -169,12 +169,12 @@ export default function SettingsPage() {
         <CardContent>
           <form onSubmit={handleProfileSubmit} className="space-y-4">
             {error && (
-              <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
+              <div className="bg-destructive/15 p-3 text-sm text-destructive">
                 {error}
               </div>
             )}
             {success && (
-              <div className="rounded-md bg-green-500/15 p-3 text-sm text-green-700 dark:text-green-400">
+              <div className="bg-green-500/15 p-3 text-sm text-green-700 dark:text-green-400">
                 {success}
               </div>
             )}
@@ -231,12 +231,12 @@ export default function SettingsPage() {
         <CardContent>
           <form onSubmit={handlePasswordSubmit} className="space-y-4">
             {passwordError && (
-              <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
+              <div className="bg-destructive/15 p-3 text-sm text-destructive">
                 {passwordError}
               </div>
             )}
             {passwordSuccess && (
-              <div className="rounded-md bg-green-500/15 p-3 text-sm text-green-700 dark:text-green-400">
+              <div className="bg-green-500/15 p-3 text-sm text-green-700 dark:text-green-400">
                 {passwordSuccess}
               </div>
             )}
@@ -297,7 +297,7 @@ export default function SettingsPage() {
               {profile.institution_members.map((membership) => (
                 <div
                   key={membership.id}
-                  className="flex items-center justify-between rounded-lg border p-4"
+                  className="flex items-center justify-between border p-4"
                 >
                   <div>
                     <p className="font-medium">{membership.institution.name}</p>

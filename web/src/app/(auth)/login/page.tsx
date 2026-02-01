@@ -50,7 +50,7 @@ function LoginForm() {
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
           {error && (
-            <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
+            <div className="bg-destructive/15 p-3 text-sm text-destructive">
               {error}
             </div>
           )}

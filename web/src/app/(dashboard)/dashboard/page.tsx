@@ -93,7 +93,7 @@ export default async function DashboardPage() {
                   <Link
                     key={enrollment.id}
                     href={`/courses/${enrollment.course_id}`}
-                    className="block rounded-lg border p-4 transition-colors hover:bg-muted"
+                    className="block border p-4 transition-colors hover:bg-accent"
                   >
                     <div className="flex items-center justify-between">
                       <div>
@@ -126,7 +126,7 @@ export default async function DashboardPage() {
                 {announcements.map((announcement) => (
                   <div
                     key={announcement.id}
-                    className="rounded-lg border p-4"
+                    className="border p-4"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="space-y-1">
