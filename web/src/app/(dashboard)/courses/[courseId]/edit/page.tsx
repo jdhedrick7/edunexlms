@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
@@ -29,9 +29,16 @@ import {
   Loader2Icon,
   ChevronDownIcon,
   ChevronRightIcon,
+  UploadCloudIcon,
+  FolderIcon,
+  ImageIcon,
+  VideoIcon,
+  FileIcon,
+  CheckCircleIcon,
+  AlertCircleIcon,
+  XIcon,
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { FileUpload } from '@/components/course/file-upload'
 
 interface Module {
   id: string
@@ -79,6 +86,14 @@ export default function CourseEditorPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [expandedModules, setExpandedModules] = useState<Set<string>>(new Set())
+
+  // Full-page drag and drop state
+  const [isDraggingOver, setIsDraggingOver] = useState(false)
+  const [uploadingFiles, setUploadingFiles] = useState(false)
+  const [uploadedFiles, setUploadedFiles] = useState<{ name: string; path: string; size: number; status: 'success' | 'error'; error?: string }[]>([])
+  const [showFilesPanel, setShowFilesPanel] = useState(false)
+  const [courseFiles, setCourseFiles] = useState<{ name: string; path: string; size?: number; type?: string; url: string }[]>([])
+  const dragCounter = useRef(0)
 
   // Dialog states
   const [showModuleDialog, setShowModuleDialog] = useState(false)
@@ -139,6 +154,125 @@ export default function CourseEditorPage() {
       }
     }
   }, [courseId])
+
+  const loadCourseFiles = useCallback(async () => {
+    const response = await fetch(`/api/courses/${courseId}/files`)
+    if (response.ok) {
+      const data = await response.json()
+      setCourseFiles(data.files || [])
+    }
+  }, [courseId])
+
+  // Full-page drag and drop handlers
+  const handleDragEnter = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    dragCounter.current++
+    if (e.dataTransfer.types.includes('Files')) {
+      setIsDraggingOver(true)
+    }
+  }, [])
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    dragCounter.current--
+    if (dragCounter.current === 0) {
+      setIsDraggingOver(false)
+    }
+  }, [])
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+  }, [])
+
+  const handleDrop = useCallback(async (e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    dragCounter.current = 0
+    setIsDraggingOver(false)
+
+    const files = Array.from(e.dataTransfer.files)
+    if (files.length === 0) return
+
+    setUploadingFiles(true)
+    setShowFilesPanel(true)
+
+    const formData = new FormData()
+    files.forEach(file => formData.append('files', file))
+
+    try {
+      const response = await fetch(`/api/courses/${courseId}/files`, {
+        method: 'POST',
+        body: formData,
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Upload failed')
+      }
+
+      const results = files.map((file, i) => ({
+        name: file.name,
+        path: data.files?.[i]?.path || '',
+        size: file.size,
+        status: 'success' as const,
+      }))
+
+      setUploadedFiles(prev => [...results, ...prev])
+      toast.success(`Uploaded ${data.uploadedCount} files`)
+      loadCourseFiles()
+    } catch (error) {
+      const results = files.map(file => ({
+        name: file.name,
+        path: '',
+        size: file.size,
+        status: 'error' as const,
+        error: error instanceof Error ? error.message : 'Upload failed',
+      }))
+      setUploadedFiles(prev => [...results, ...prev])
+      toast.error(error instanceof Error ? error.message : 'Upload failed')
+    } finally {
+      setUploadingFiles(false)
+    }
+  }, [courseId, loadCourseFiles])
+
+  const deleteFile = async (path: string) => {
+    const response = await fetch(`/api/courses/${courseId}/files?path=${encodeURIComponent(path)}`, {
+      method: 'DELETE',
+    })
+
+    if (response.ok) {
+      setCourseFiles(prev => prev.filter(f => f.path !== path))
+      toast.success('File deleted')
+    } else {
+      toast.error('Failed to delete file')
+    }
+  }
+
+  const getFileIcon = (type?: string) => {
+    if (!type) return FileIcon
+    if (type.startsWith('image/')) return ImageIcon
+    if (type.startsWith('video/')) return VideoIcon
+    if (type === 'application/pdf' || type.startsWith('text/')) return FileTextIcon
+    return FileIcon
+  }
+
+  const formatSize = (bytes?: number) => {
+    if (!bytes) return ''
+    if (bytes < 1024) return `${bytes} B`
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+    return `${(bytes / 1024 / 1024).toFixed(1)} MB`
+  }
+
+  // Load course files on mount
+  useEffect(() => {
+    if (!loading) {
+      loadCourseFiles()
+    }
+  }, [loading, loadCourseFiles])
 
   const saveDraft = async () => {
     setSaving(true)
@@ -283,7 +417,26 @@ export default function CourseEditorPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div
+      className="space-y-6 relative min-h-[calc(100vh-10rem)]"
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+    >
+      {/* Full-page drag overlay */}
+      {isDraggingOver && (
+        <div className="fixed inset-0 z-50 bg-primary/10 backdrop-blur-sm flex items-center justify-center pointer-events-none">
+          <div className="bg-card border-2 border-dashed border-primary rounded-xl p-12 text-center shadow-2xl">
+            <UploadCloudIcon className="h-16 w-16 mx-auto text-primary mb-4" />
+            <h2 className="text-2xl font-bold mb-2">Drop files to upload</h2>
+            <p className="text-muted-foreground">
+              PDFs, images, videos, documents, and more
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -299,6 +452,10 @@ export default function CourseEditorPage() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={() => setShowFilesPanel(!showFilesPanel)}>
+            <FolderIcon className="h-4 w-4 mr-2" />
+            Files {courseFiles.length > 0 && `(${courseFiles.length})`}
+          </Button>
           <Button variant="outline" onClick={saveDraft} disabled={saving}>
             {saving ? <Loader2Icon className="h-4 w-4 animate-spin mr-2" /> : <SaveIcon className="h-4 w-4 mr-2" />}
             Save Draft
@@ -307,6 +464,12 @@ export default function CourseEditorPage() {
             Create Version
           </Button>
         </div>
+      </div>
+
+      {/* Drag hint banner */}
+      <div className="bg-muted/50 border border-dashed rounded-lg p-4 text-center text-sm text-muted-foreground">
+        <UploadCloudIcon className="h-5 w-5 inline-block mr-2" />
+        Drag and drop files anywhere on this page to upload course materials
       </div>
 
       {/* Modules */}
@@ -428,8 +591,82 @@ export default function CourseEditorPage() {
         )}
       </div>
 
-      {/* File Upload Section */}
-      <FileUpload courseId={courseId} />
+      {/* Files Panel */}
+      {showFilesPanel && (
+        <Card>
+          <CardHeader className="py-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base flex items-center gap-2">
+                <FolderIcon className="h-5 w-5" />
+                Course Files
+              </CardTitle>
+              <Button variant="ghost" size="sm" onClick={() => setShowFilesPanel(false)}>
+                <XIcon className="h-4 w-4" />
+              </Button>
+            </div>
+            <CardDescription>
+              Files uploaded to this course. Drag and drop anywhere to add more.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {uploadingFiles && (
+              <div className="flex items-center gap-2 mb-4 p-3 bg-muted rounded-md">
+                <Loader2Icon className="h-4 w-4 animate-spin" />
+                <span className="text-sm">Uploading files...</span>
+              </div>
+            )}
+
+            {courseFiles.length === 0 && !uploadingFiles ? (
+              <div className="text-center py-8 text-muted-foreground">
+                <FolderIcon className="h-10 w-10 mx-auto mb-2 opacity-50" />
+                <p>No files uploaded yet</p>
+                <p className="text-sm">Drag and drop files to upload</p>
+              </div>
+            ) : (
+              <div className="border rounded-md divide-y max-h-64 overflow-y-auto">
+                {courseFiles.map((file) => {
+                  const Icon = getFileIcon(file.type)
+                  return (
+                    <div key={file.path} className="flex items-center gap-3 p-3 hover:bg-muted/50">
+                      <Icon className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium truncate">{file.name}</p>
+                        {file.size && (
+                          <p className="text-xs text-muted-foreground">{formatSize(file.size)}</p>
+                        )}
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => deleteFile(file.path)}
+                      >
+                        <Trash2Icon className="h-4 w-4 text-destructive" />
+                      </Button>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+
+            {/* Recent uploads status */}
+            {uploadedFiles.length > 0 && (
+              <div className="mt-4 space-y-2">
+                <p className="text-xs font-medium text-muted-foreground">Recent uploads</p>
+                {uploadedFiles.slice(0, 5).map((file, i) => (
+                  <div key={i} className="flex items-center gap-2 text-sm">
+                    {file.status === 'success' ? (
+                      <CheckCircleIcon className="h-4 w-4 text-green-500" />
+                    ) : (
+                      <AlertCircleIcon className="h-4 w-4 text-destructive" />
+                    )}
+                    <span className="truncate">{file.name}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Module Dialog */}
       <ModuleDialog

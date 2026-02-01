@@ -241,7 +241,9 @@ export function FileUpload({ courseId, onFilesUploaded }: FileUploadProps) {
                         <CheckCircleIcon className="h-5 w-5 text-green-500" />
                       )}
                       {file.status === 'error' && (
-                        <AlertCircleIcon className="h-5 w-5 text-destructive" title={file.error} />
+                        <span title={file.error}>
+                          <AlertCircleIcon className="h-5 w-5 text-destructive" />
+                        </span>
                       )}
                       {file.status === 'uploading' && (
                         <Loader2Icon className="h-5 w-5 animate-spin text-primary" />
