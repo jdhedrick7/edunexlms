@@ -8,6 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { ModuleList, type ModuleItem } from '@/components/course/module-list'
+import { CourseBuilder } from '@/components/course/course-builder'
+import { CourseVersionsTab } from '@/components/course/course-versions-tab'
 import type { Course, CourseVersion, EnrollmentRole } from '@/types/database'
 import {
   Settings,
@@ -84,6 +86,17 @@ interface AnalyticsData {
   announcementCount: number
 }
 
+interface Version {
+  id: string
+  version_number: number
+  status: 'draft' | 'review' | 'approved' | 'archived'
+  notes: string | null
+  storage_path: string
+  created_at: string
+  created_by_user?: { full_name: string | null; email: string } | null
+  approved_by_user?: { full_name: string | null; email: string } | null
+}
+
 interface CourseTabsProps {
   course: Course & {
     institution?: { id: string; name: string } | null
@@ -97,11 +110,13 @@ interface CourseTabsProps {
   students?: Student[]
   submissions?: Submission[]
   analytics?: AnalyticsData
+  // Teacher data
+  versions?: Version[]
   // Student data
   studentGrades?: StudentGrade[]
 }
 
-type TabId = 'content' | 'announcements' | 'grades' | 'gradebook' | 'submissions' | 'students' | 'analytics'
+type TabId = 'content' | 'announcements' | 'grades' | 'gradebook' | 'submissions' | 'students' | 'analytics' | 'builder' | 'versions'
 
 export function CourseTabs({
   course,
@@ -112,9 +127,11 @@ export function CourseTabs({
   students,
   submissions,
   analytics,
+  versions,
   studentGrades,
 }: CourseTabsProps) {
   const [activeTab, setActiveTab] = useState<TabId>('content')
+  const [versionsData, setVersionsData] = useState(versions || [])
   const isStaff = enrollment.role === 'teacher' || enrollment.role === 'ta'
   const baseUrl = `/courses/${course.id}`
 
@@ -133,6 +150,13 @@ export function CourseTabs({
       { id: 'submissions', name: 'Submissions', icon: FileText },
       { id: 'students', name: 'Students', icon: Users },
       { id: 'analytics', name: 'Analytics', icon: BarChart3 }
+    )
+  }
+
+  if (enrollment.role === 'teacher') {
+    tabs.push(
+      { id: 'builder', name: 'Builder', icon: PenToolIcon },
+      { id: 'versions', name: 'Versions', icon: GitBranch }
     )
   }
 
@@ -258,25 +282,6 @@ export function CourseTabs({
               </button>
             )
           })}
-          {/* External links for Builder/Versions */}
-          {enrollment.role === 'teacher' && (
-            <>
-              <Link
-                href={`${baseUrl}/edit`}
-                className="flex items-center gap-1.5 border-b-2 border-transparent px-4 py-2.5 text-sm font-medium text-muted-foreground hover:border-border hover:text-foreground transition-colors"
-              >
-                <PenToolIcon className="size-4" />
-                Builder
-              </Link>
-              <Link
-                href={`${baseUrl}/versions`}
-                className="flex items-center gap-1.5 border-b-2 border-transparent px-4 py-2.5 text-sm font-medium text-muted-foreground hover:border-border hover:text-foreground transition-colors"
-              >
-                <GitBranch className="size-4" />
-                Versions
-              </Link>
-            </>
-          )}
         </div>
       </div>
 
@@ -668,6 +673,30 @@ export function CourseTabs({
               </div>
             </div>
           </div>
+        )}
+
+        {/* Builder Tab */}
+        {activeTab === 'builder' && enrollment.role === 'teacher' && (
+          <CourseBuilder
+            courseId={course.id}
+            onVersionCreated={() => setActiveTab('versions')}
+          />
+        )}
+
+        {/* Versions Tab */}
+        {activeTab === 'versions' && enrollment.role === 'teacher' && (
+          <CourseVersionsTab
+            courseId={course.id}
+            versions={versionsData}
+            publishedVersionId={course.published_version?.id || null}
+            institutionId={course.institution?.id || ''}
+            onVersionsChange={() => {
+              // Refresh versions data
+              fetch(`/api/courses/${course.id}/versions`)
+                .then(res => res.json())
+                .then(data => setVersionsData(data.versions || []))
+            }}
+          />
         )}
       </div>
     </div>

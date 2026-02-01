@@ -215,6 +215,28 @@ export default async function CoursePage({ params }: CoursePageProps) {
     }
   }
 
+  // Teacher-specific data (versions)
+  let versions = undefined
+  if (enrollment.role === 'teacher') {
+    const { data: versionsData } = await supabase
+      .from('course_versions')
+      .select(`
+        *,
+        created_by_user:users!course_versions_created_by_fkey(full_name, email),
+        approved_by_user:users!course_versions_approved_by_fkey(full_name, email)
+      `)
+      .eq('course_id', courseId)
+      .order('version_number', { ascending: false })
+
+    versions = (versionsData || [])
+      .filter((v) => v.status && ['draft', 'review', 'approved', 'archived'].includes(v.status))
+      .map((v) => ({
+        ...v,
+        status: v.status as 'draft' | 'review' | 'approved' | 'archived',
+        created_at: v.created_at || new Date().toISOString(),
+      }))
+  }
+
   // Student-specific data (grades)
   let studentGrades = undefined
   if (enrollment.role === 'student') {
@@ -244,6 +266,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
       students={students}
       submissions={submissions}
       analytics={analytics}
+      versions={versions}
       studentGrades={studentGrades}
     />
   )
