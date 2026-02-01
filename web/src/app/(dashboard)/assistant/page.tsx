@@ -124,19 +124,18 @@ export default async function AssistantPage() {
             Your teaching companion
           </p>
         </div>
-        <div className="flex h-10 w-10 items-center justify-center bg-gradient-to-br from-primary to-primary/60">
-          <svg
-            viewBox="0 0 16 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 text-primary-foreground"
-          >
-            <rect x="1" y="1" width="6" height="6" fill="currentColor" />
-            <rect x="9" y="1" width="6" height="6" fill="currentColor" opacity="0.6" />
-            <rect x="1" y="9" width="6" height="6" fill="currentColor" opacity="0.6" />
-            <rect x="9" y="9" width="6" height="6" fill="currentColor" />
-          </svg>
-        </div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-8 w-8 text-primary"
+        >
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+        </svg>
       </div>
 
       {/* Chat Interface */}

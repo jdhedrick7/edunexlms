@@ -9,24 +9,9 @@ import {
   ChevronDown,
   Trash2,
   BookOpen,
+  Sparkles,
+  Zap,
 } from 'lucide-react'
-
-// Minimal logo icon - 2x2 grid matching EduNex brand
-function LogoIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 16 16"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-    >
-      <rect x="1" y="1" width="6" height="6" fill="currentColor" />
-      <rect x="9" y="1" width="6" height="6" fill="currentColor" opacity="0.6" />
-      <rect x="1" y="9" width="6" height="6" fill="currentColor" opacity="0.6" />
-      <rect x="9" y="9" width="6" height="6" fill="currentColor" />
-    </svg>
-  )
-}
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import type { Tables } from '@/types/database'
@@ -323,11 +308,12 @@ export function ModernChatInterface({
           {filteredMessages.length === 0 ? (
             <div className="flex min-h-[60vh] flex-col items-center justify-center">
               {/* Hero icon */}
-              <div className="relative mb-8">
-                <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 via-primary/10 to-transparent blur-2xl" />
-                <div className="relative flex h-20 w-20 items-center justify-center bg-gradient-to-br from-primary to-primary/60">
-                  <LogoIcon className="h-10 w-10 text-primary-foreground" />
-                </div>
+              <div className="mb-8">
+                {isTutor ? (
+                  <Sparkles className="h-12 w-12 text-primary" strokeWidth={1.5} />
+                ) : (
+                  <Zap className="h-12 w-12 text-primary" strokeWidth={1.5} />
+                )}
               </div>
 
               {/* Welcome text */}
@@ -406,12 +392,16 @@ export function ModernChatInterface({
                     className={cn(
                       'flex h-8 w-8 shrink-0 items-center justify-center',
                       message.role === 'assistant'
-                        ? 'bg-gradient-to-br from-primary to-primary/60 text-primary-foreground'
+                        ? 'text-primary'
                         : 'bg-muted text-muted-foreground'
                     )}
                   >
                     {message.role === 'assistant' ? (
-                      <LogoIcon className="h-4 w-4" />
+                      isTutor ? (
+                        <Sparkles className="h-5 w-5" strokeWidth={1.5} />
+                      ) : (
+                        <Zap className="h-5 w-5" strokeWidth={1.5} />
+                      )
                     ) : (
                       <span className="text-xs font-medium">
                         {userName?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'U'}
