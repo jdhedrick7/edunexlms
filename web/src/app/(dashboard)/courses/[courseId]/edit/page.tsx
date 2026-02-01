@@ -31,6 +31,7 @@ import {
   ChevronRightIcon,
 } from 'lucide-react'
 import { toast } from 'sonner'
+import { FileUpload } from '@/components/course/file-upload'
 
 interface Module {
   id: string
@@ -426,6 +427,9 @@ export default function CourseEditorPage() {
           </div>
         )}
       </div>
+
+      {/* File Upload Section */}
+      <FileUpload courseId={courseId} />
 
       {/* Module Dialog */}
       <ModuleDialog
