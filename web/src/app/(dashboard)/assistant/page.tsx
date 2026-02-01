@@ -1,6 +1,14 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { AssistantInterface } from '@/components/assistant/assistant-interface'
+import { ModernChatInterface } from '@/components/chat/modern-chat-interface'
+
+interface AssistantMessage {
+  id: string
+  role: 'user' | 'assistant'
+  content: string
+  course_id: string | null
+  created_at: string | null
+}
 
 export default async function AssistantPage() {
   const supabase = await createClient()
@@ -9,6 +17,13 @@ export default async function AssistantPage() {
   if (!user) {
     redirect('/login')
   }
+
+  // Get user profile
+  const { data: profile } = await supabase
+    .from('users')
+    .select('full_name')
+    .eq('id', user.id)
+    .single()
 
   // Check if user is a teacher or TA in any course
   const { data: enrollments } = await supabase
@@ -60,14 +75,25 @@ export default async function AssistantPage() {
   }
 
   // Get recent messages if assistant exists
-  const { data: messages } = assistant
-    ? await supabase
-        .from('teacher_messages')
-        .select('*')
-        .eq('assistant_id', assistant.id)
-        .order('created_at', { ascending: true })
-        .limit(50)
-    : { data: [] }
+  let messages: AssistantMessage[] = []
+  if (assistant) {
+    const { data: assistantMessages } = await supabase
+      .from('teacher_messages')
+      .select('id, role, content, course_id, created_at')
+      .eq('assistant_id', assistant.id)
+      .order('created_at', { ascending: true })
+      .limit(50)
+
+    if (assistantMessages) {
+      messages = assistantMessages.map((m) => ({
+        id: m.id,
+        role: m.role as 'user' | 'assistant',
+        content: m.content,
+        course_id: m.course_id,
+        created_at: m.created_at,
+      }))
+    }
+  }
 
   // Get teacher's courses
   const courseIds = enrollments?.map(e => e.course_id) || []
@@ -89,19 +115,41 @@ export default async function AssistantPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">AI Assistant</h1>
-        <p className="text-muted-foreground">
-          Your personal AI assistant for managing courses and helping students
-        </p>
+    <div className="flex h-[calc(100vh-4rem)] flex-col">
+      {/* Header */}
+      <div className="flex items-center justify-between border-b px-6 py-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">AI Assistant</h1>
+          <p className="text-sm text-muted-foreground">
+            Your teaching companion
+          </p>
+        </div>
+        <div className="flex h-10 w-10 items-center justify-center bg-gradient-to-br from-primary to-primary/60">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-5 w-5 text-primary-foreground"
+          >
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+          </svg>
+        </div>
       </div>
 
-      <AssistantInterface
-        initialMessages={messages || []}
-        courses={allCourses}
-        assistantId={assistant?.id || null}
-      />
+      {/* Chat Interface */}
+      <div className="flex-1 overflow-hidden">
+        <ModernChatInterface
+          initialMessages={messages}
+          courses={allCourses}
+          userName={profile?.full_name ?? null}
+          type="assistant"
+          apiEndpoint="/api/assistant/chat"
+        />
+      </div>
     </div>
   )
 }

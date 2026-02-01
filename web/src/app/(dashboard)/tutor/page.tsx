@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { ChatInterface } from '@/components/tutor/chat-interface'
+import { ModernChatInterface } from '@/components/chat/modern-chat-interface'
 import type { Tables } from '@/types/database'
 
 interface TutorMessage {
@@ -70,29 +69,46 @@ export default async function TutorPage() {
     : []
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">AI Tutor</h1>
-        <p className="text-muted-foreground">
-          Your personal AI tutor with access to all your course materials
-        </p>
+    <div className="flex h-[calc(100vh-4rem)] flex-col">
+      {/* Header */}
+      <div className="flex items-center justify-between border-b px-6 py-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">AI Tutor</h1>
+          <p className="text-sm text-muted-foreground">
+            Your personal learning companion
+          </p>
+        </div>
+        <div className="flex h-10 w-10 items-center justify-center bg-gradient-to-br from-primary to-primary/60">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-5 w-5 text-primary-foreground"
+          >
+            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+            <path d="M5 3v4" />
+            <path d="M19 17v4" />
+            <path d="M3 5h4" />
+            <path d="M17 19h4" />
+          </svg>
+        </div>
       </div>
 
-      <Card className="flex h-[calc(100vh-16rem)] flex-col overflow-hidden">
-        <CardHeader className="flex-shrink-0 border-b py-4">
-          <CardTitle>Chat</CardTitle>
-          <CardDescription>
-            Ask questions about your courses, get help with assignments, or explore topics
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex-1 overflow-hidden p-0">
-          <ChatInterface
-            initialMessages={messages}
-            courses={courses}
-            userName={profile?.full_name ?? null}
-          />
-        </CardContent>
-      </Card>
+      {/* Chat Interface */}
+      <div className="flex-1 overflow-hidden">
+        <ModernChatInterface
+          initialMessages={messages}
+          courses={courses}
+          userName={profile?.full_name ?? null}
+          type="tutor"
+          apiEndpoint="/api/tutor/chat"
+          clearEndpoint="/api/tutor/history"
+        />
+      </div>
     </div>
   )
 }
