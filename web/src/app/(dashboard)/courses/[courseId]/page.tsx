@@ -1,12 +1,7 @@
 import { notFound, redirect } from 'next/navigation'
-import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import { CourseHeader } from '@/components/course/course-header'
-import { ModuleList } from '@/components/course/module-list'
+import { CourseTabs } from '@/components/course/course-tabs'
 import { fetchCourseModules } from '@/lib/course-storage'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Megaphone, Clock, Pin, FolderOpen, BookOpen, AlertCircle } from 'lucide-react'
 import type { EnrollmentRole } from '@/types/database'
 
 interface CoursePageProps {
@@ -47,7 +42,6 @@ export default async function CoursePage({ params }: CoursePageProps) {
     .single()
 
   if (enrollmentError || !enrollment) {
-    // User is not enrolled in this course
     notFound()
   }
 
@@ -68,7 +62,6 @@ export default async function CoursePage({ params }: CoursePageProps) {
   }
 
   // Determine which version to show
-  // Staff can see draft versions, students only see published
   const versionToShow = isStaff && latestDraftVersion
     ? latestDraftVersion
     : course.published_version
@@ -83,7 +76,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
     )
   }
 
-  // Fetch recent announcements (limit 3 for overview)
+  // Fetch all announcements
   const now = new Date().toISOString()
   const { data: announcements } = await supabase
     .from('announcements')
@@ -95,210 +88,163 @@ export default async function CoursePage({ params }: CoursePageProps) {
     .lte('publish_at', now)
     .order('pinned', { ascending: false })
     .order('publish_at', { ascending: false })
-    .limit(3)
+
+  // Staff-specific data
+  let students = undefined
+  let submissions = undefined
+  let analytics = undefined
+
+  if (isStaff) {
+    // Get all students
+    const { data: studentEnrollments } = await supabase
+      .from('enrollments')
+      .select(`
+        user_id,
+        enrolled_at,
+        user:users(id, full_name, email, avatar_url)
+      `)
+      .eq('course_id', courseId)
+      .eq('role', 'student')
+      .order('enrolled_at', { ascending: true })
+
+    students = (studentEnrollments || []).map((e) => ({
+      ...e.user as {
+        id: string
+        full_name: string | null
+        email: string
+        avatar_url: string | null
+      },
+      enrolledAt: e.enrolled_at,
+    }))
+
+    // Get submissions with user info
+    const { data: submissionsData } = await supabase
+      .from('submissions')
+      .select(`
+        id,
+        assignment_path,
+        status,
+        submitted_at,
+        user_id,
+        user:users(id, full_name, email, avatar_url)
+      `)
+      .eq('course_id', courseId)
+      .order('submitted_at', { ascending: false })
+
+    // Get grades to check which are graded
+    const { data: grades } = await supabase
+      .from('grades')
+      .select('user_id, assignment_path')
+      .eq('course_id', courseId)
+
+    const gradedSet = new Set(
+      (grades || []).map(g => `${g.user_id}:${g.assignment_path}`)
+    )
+
+    submissions = (submissionsData || []).map((s) => ({
+      id: s.id,
+      assignment_path: s.assignment_path,
+      status: s.status,
+      submitted_at: s.submitted_at,
+      student: s.user as {
+        id: string
+        full_name: string | null
+        email: string
+        avatar_url: string | null
+      },
+      isGraded: gradedSet.has(`${s.user_id}:${s.assignment_path}`),
+    }))
+
+    // Analytics data
+    const { count: studentCount } = await supabase
+      .from('enrollments')
+      .select('*', { count: 'exact', head: true })
+      .eq('course_id', courseId)
+      .eq('role', 'student')
+
+    const { count: staffCount } = await supabase
+      .from('enrollments')
+      .select('*', { count: 'exact', head: true })
+      .eq('course_id', courseId)
+      .in('role', ['teacher', 'ta'])
+
+    const totalSubmissions = submissionsData?.length || 0
+    const pendingSubmissions = submissionsData?.filter(s => s.status === 'submitted').length || 0
+
+    const { data: allGrades } = await supabase
+      .from('grades')
+      .select('points_earned, points_possible')
+      .eq('course_id', courseId)
+
+    const gradedCount = allGrades?.length || 0
+    const averageScore = gradedCount > 0
+      ? Math.round(
+          allGrades!.reduce((sum, g) => sum + ((g.points_earned || 0) / g.points_possible) * 100, 0) / gradedCount
+        )
+      : 0
+
+    const { data: quizAttempts } = await supabase
+      .from('quiz_attempts')
+      .select('id, score, max_score, submitted_at')
+      .eq('course_id', courseId)
+
+    const completedQuizzes = quizAttempts?.filter(q => q.submitted_at).length || 0
+    const averageQuizScore = completedQuizzes > 0
+      ? Math.round(
+          quizAttempts!
+            .filter(q => q.submitted_at && q.max_score && q.max_score > 0)
+            .reduce((sum, q) => sum + ((q.score || 0) / q.max_score!) * 100, 0) / completedQuizzes
+        )
+      : 0
+
+    const { count: announcementCount } = await supabase
+      .from('announcements')
+      .select('*', { count: 'exact', head: true })
+      .eq('course_id', courseId)
+
+    analytics = {
+      studentCount: studentCount || 0,
+      staffCount: staffCount || 0,
+      totalSubmissions,
+      pendingSubmissions,
+      gradedCount,
+      averageScore,
+      completedQuizzes,
+      averageQuizScore,
+      announcementCount: announcementCount || 0,
+    }
+  }
+
+  // Student-specific data (grades)
+  let studentGrades = undefined
+  if (enrollment.role === 'student') {
+    const { data: myGrades } = await supabase
+      .from('grades')
+      .select('*')
+      .eq('course_id', courseId)
+      .eq('user_id', user.id)
+      .order('graded_at', { ascending: false })
+
+    studentGrades = (myGrades || []).map(g => ({
+      assignment_path: g.assignment_path,
+      title: g.assignment_path.split('/').slice(-2, -1)[0]?.replace(/^\d+-/, '').replace(/-/g, ' ') || g.assignment_path,
+      points_earned: g.points_earned,
+      points_possible: g.points_possible,
+      graded_at: g.graded_at,
+    }))
+  }
 
   return (
-    <div className="-m-6">
-      <CourseHeader
-        course={course}
-        enrollment={{ role: enrollment.role as EnrollmentRole }}
-        latestDraftVersion={latestDraftVersion}
-      />
-
-      <div className="flex">
-        {/* Sidebar - Module navigation */}
-        <aside className="hidden w-72 shrink-0 border-r bg-muted/30 p-4 lg:block">
-          <div className="mb-4">
-            <h2 className="flex items-center gap-2 text-sm font-semibold text-muted-foreground">
-              <BookOpen className="size-4" />
-              Course Content
-            </h2>
-          </div>
-          <ModuleList
-            courseId={courseId}
-            modules={modules}
-            isStaff={isStaff}
-          />
-        </aside>
-
-        {/* Main content area */}
-        <main className="flex-1 p-6">
-          <div className="grid gap-6 lg:grid-cols-3">
-            {/* Left column - Course overview */}
-            <div className="lg:col-span-2 space-y-6">
-              {/* No content placeholder */}
-              {modules.length === 0 && (
-                <Card>
-                  <CardContent className="flex flex-col items-center justify-center py-12">
-                    <FolderOpen className="size-16 text-muted-foreground/50" />
-                    <h3 className="mt-4 text-lg font-semibold">No Course Content Yet</h3>
-                    <p className="mt-2 text-center text-sm text-muted-foreground max-w-md">
-                      {isStaff ? (
-                        <>
-                          This course doesn&apos;t have any published content yet.
-                          Create and publish a course version to add modules and materials.
-                        </>
-                      ) : (
-                        <>
-                          Your instructor hasn&apos;t published any content for this course yet.
-                          Check back later or contact your instructor for more information.
-                        </>
-                      )}
-                    </p>
-                    {enrollment.role === 'teacher' && (
-                      <Link href={`/courses/${courseId}/versions`} className="mt-4">
-                        <Button>
-                          Manage Versions
-                        </Button>
-                      </Link>
-                    )}
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Module overview for mobile */}
-              {modules.length > 0 && (
-                <Card className="lg:hidden">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <BookOpen className="size-5" />
-                      Course Modules
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ModuleList
-                      courseId={courseId}
-                      modules={modules}
-                      isStaff={isStaff}
-                    />
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Quick start guide for students */}
-              {!isStaff && modules.length > 0 && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Getting Started</CardTitle>
-                    <CardDescription>
-                      Welcome to {course.name}. Here&apos;s how to get started:
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="flex items-start gap-3">
-                        <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-medium">
-                          1
-                        </div>
-                        <div>
-                          <p className="font-medium">Browse the course content</p>
-                          <p className="text-sm text-muted-foreground">
-                            Use the sidebar to navigate through modules and lessons.
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-3">
-                        <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-medium">
-                          2
-                        </div>
-                        <div>
-                          <p className="font-medium">Complete assignments and quizzes</p>
-                          <p className="text-sm text-muted-foreground">
-                            Each module may include assignments or quizzes for you to complete.
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-3">
-                        <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-medium">
-                          3
-                        </div>
-                        <div>
-                          <p className="font-medium">Ask your AI Tutor for help</p>
-                          <p className="text-sm text-muted-foreground">
-                            Your personal AI tutor can help explain concepts and answer questions.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-            </div>
-
-            {/* Right column - Announcements */}
-            <div className="space-y-6">
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                  <div>
-                    <CardTitle className="flex items-center gap-2">
-                      <Megaphone className="size-5" />
-                      Announcements
-                    </CardTitle>
-                    {announcements && announcements.length > 0 && (
-                      <CardDescription>
-                        Latest updates from your instructor
-                      </CardDescription>
-                    )}
-                  </div>
-                  <Link href={`/courses/${courseId}/announcements`}>
-                    <Button variant="ghost" size="sm">
-                      View All
-                    </Button>
-                  </Link>
-                </CardHeader>
-                <CardContent>
-                  {(!announcements || announcements.length === 0) ? (
-                    <div className="flex flex-col items-center justify-center py-8 text-center">
-                      <AlertCircle className="size-10 text-muted-foreground/50" />
-                      <p className="mt-2 text-sm text-muted-foreground">
-                        No announcements yet
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {announcements.map((announcement) => (
-                        <Link
-                          key={announcement.id}
-                          href={`/courses/${courseId}/announcements#${announcement.id}`}
-                          className="block"
-                        >
-                          <div className="rounded-lg border p-3 transition-colors hover:bg-muted/50">
-                            <div className="flex items-start gap-2">
-                              {announcement.pinned && (
-                                <Pin className="size-4 shrink-0 text-primary mt-0.5" />
-                              )}
-                              <div className="flex-1 min-w-0">
-                                <p className="font-medium line-clamp-1">
-                                  {announcement.title}
-                                </p>
-                                <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
-                                  {announcement.content.replace(/[#*_`]/g, '').substring(0, 150)}
-                                </p>
-                                <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
-                                  <Clock className="size-3" />
-                                  <span>
-                                    {new Date(announcement.publish_at || announcement.created_at || '').toLocaleDateString()}
-                                  </span>
-                                  {announcement.author && (
-                                    <>
-                                      <span>by</span>
-                                      <span>{announcement.author.full_name}</span>
-                                    </>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </main>
-      </div>
-    </div>
+    <CourseTabs
+      course={course}
+      enrollment={{ role: enrollment.role as EnrollmentRole }}
+      latestDraftVersion={latestDraftVersion}
+      modules={modules}
+      announcements={announcements || []}
+      students={students}
+      submissions={submissions}
+      analytics={analytics}
+      studentGrades={studentGrades}
+    />
   )
 }
