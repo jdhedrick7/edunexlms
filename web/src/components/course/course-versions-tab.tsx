@@ -46,13 +46,29 @@ export function CourseVersionsTab({
     }
   }, [courseId])
 
+  // Refresh versions on mount to pick up newly created versions
+  useEffect(() => {
+    let cancelled = false
+    const refresh = async () => {
+      const response = await fetch(`/api/courses/${courseId}/versions`)
+      if (cancelled) return
+      if (response.ok) {
+        const data = await response.json()
+        setVersions(data.versions || [])
+        setPublishedVersionId(data.publishedVersionId)
+      }
+    }
+    refresh()
+    return () => { cancelled = true }
+  }, [courseId])
+
   const handlePublish = async (versionId: string) => {
     setLoading(versionId)
     try {
-      const response = await fetch(`/api/courses/${courseId}/versions/${versionId}`, {
-        method: 'PATCH',
+      const response = await fetch(`/api/courses/${courseId}/publish`, {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'publish' }),
+        body: JSON.stringify({ versionId }),
       })
 
       if (!response.ok) {

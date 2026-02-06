@@ -45,11 +45,23 @@ export async function POST(
     return NextResponse.json({ error: 'Version not found' }, { status: 404 })
   }
 
-  if (version.status !== 'approved') {
+  if (version.status === 'archived') {
     return NextResponse.json(
-      { error: 'Only approved versions can be published' },
+      { error: 'Archived versions cannot be published' },
       { status: 400 }
     )
+  }
+
+  // Auto-promote draft/review versions to approved for direct publish
+  if (version.status !== 'approved') {
+    await supabase
+      .from('course_versions')
+      .update({
+        status: 'approved',
+        approved_by: user.id,
+        approved_at: new Date().toISOString(),
+      })
+      .eq('id', versionId)
   }
 
   // Get current published version to archive it

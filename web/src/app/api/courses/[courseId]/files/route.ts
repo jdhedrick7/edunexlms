@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { createAdminClient } from '@/lib/supabase/admin'
 
 // GET: List uploaded files for a course
 export async function GET(
@@ -41,9 +40,7 @@ export async function GET(
   const bucketId = `inst-${course.institution_id}`
   const filesPath = `courses/${courseId}/uploads`
 
-  const adminClient = createAdminClient()
-
-  const { data: files, error } = await adminClient.storage
+  const { data: files, error } = await supabase.storage
     .from(bucketId)
     .list(filesPath, { limit: 500 })
 
@@ -58,7 +55,7 @@ export async function GET(
     type: file.metadata?.mimetype,
     path: `${filesPath}/${file.name}`,
     createdAt: file.created_at,
-    url: adminClient.storage.from(bucketId).getPublicUrl(`${filesPath}/${file.name}`).data.publicUrl,
+    url: supabase.storage.from(bucketId).getPublicUrl(`${filesPath}/${file.name}`).data.publicUrl,
   })) || []
 
   return NextResponse.json({ files: filesWithUrls })
@@ -110,31 +107,6 @@ export async function POST(
   const bucketId = `inst-${course.institution_id}`
   const uploadsPath = `courses/${courseId}/uploads`
 
-  const adminClient = createAdminClient()
-
-  // Ensure bucket exists
-  const { data: buckets } = await adminClient.storage.listBuckets()
-  const bucketExists = buckets?.some(b => b.name === bucketId)
-
-  if (!bucketExists) {
-    const { error: bucketError } = await adminClient.storage.createBucket(bucketId, {
-      public: false,
-      fileSizeLimit: 52428800,
-      allowedMimeTypes: [
-        'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml',
-        'application/pdf', 'application/json', 'text/plain', 'text/markdown',
-        'application/zip', 'video/mp4', 'audio/mpeg',
-        'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-      ],
-    })
-
-    if (bucketError) {
-      return NextResponse.json({ error: 'Failed to initialize storage' }, { status: 500 })
-    }
-  }
-
   const uploadedFiles: { name: string; path: string; size: number }[] = []
   const errors: string[] = []
 
@@ -148,7 +120,7 @@ export async function POST(
 
       const arrayBuffer = await file.arrayBuffer()
 
-      const { error: uploadError } = await adminClient.storage
+      const { error: uploadError } = await supabase.storage
         .from(bucketId)
         .upload(filePath, arrayBuffer, {
           contentType: file.type,
@@ -233,9 +205,8 @@ export async function DELETE(
   }
 
   const bucketId = `inst-${course.institution_id}`
-  const adminClient = createAdminClient()
 
-  const { error } = await adminClient.storage
+  const { error } = await supabase.storage
     .from(bucketId)
     .remove([filePath])
 

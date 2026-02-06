@@ -1,5 +1,4 @@
 import { createClient } from '@/lib/supabase/server'
-import { createAdminClient } from '@/lib/supabase/admin'
 import { NextRequest, NextResponse } from 'next/server'
 import JSZip from 'jszip'
 
@@ -84,28 +83,6 @@ export async function POST(
     const storagePath = `courses/${courseId}/material/${versionId}`
     const bucketId = `inst-${course.institution_id}`
 
-    const adminClient = createAdminClient()
-
-    // Ensure bucket exists
-    const { data: buckets } = await adminClient.storage.listBuckets()
-    const bucketExists = buckets?.some(b => b.name === bucketId)
-
-    if (!bucketExists) {
-      const { error: bucketError } = await adminClient.storage.createBucket(bucketId, {
-        public: false,
-        fileSizeLimit: 52428800,
-        allowedMimeTypes: [
-          'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml',
-          'application/pdf', 'application/json', 'text/plain', 'text/markdown',
-          'application/zip', 'video/mp4', 'audio/mpeg'
-        ],
-      })
-
-      if (bucketError) {
-        return NextResponse.json({ error: 'Failed to initialize storage' }, { status: 500 })
-      }
-    }
-
     const uploadErrors: string[] = []
     let uploadedCount = 0
 
@@ -135,7 +112,7 @@ export async function POST(
         else if (relativePath.endsWith('.gif')) contentType = 'image/gif'
         else if (relativePath.endsWith('.pdf')) contentType = 'application/pdf'
 
-        const { error: uploadError } = await adminClient.storage
+        const { error: uploadError } = await supabase.storage
           .from(bucketId)
           .upload(fullPath, content, {
             contentType,

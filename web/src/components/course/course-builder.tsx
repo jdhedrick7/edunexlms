@@ -99,17 +99,6 @@ export function CourseBuilder({ courseId, onVersionCreated }: CourseBuilderProps
   const [showQuizDialog, setShowQuizDialog] = useState(false)
   const [quizModuleId, setQuizModuleId] = useState<string | null>(null)
 
-  const loadDraft = useCallback(async () => {
-    const response = await fetch(`/api/courses/${courseId}/draft`)
-    if (response.ok) {
-      const data = await response.json()
-      if (data.modules) {
-        setModules(data.modules)
-      }
-    }
-    setLoading(false)
-  }, [courseId])
-
   const loadCourseFiles = useCallback(async () => {
     const response = await fetch(`/api/courses/${courseId}/files`)
     if (response.ok) {
@@ -119,8 +108,21 @@ export function CourseBuilder({ courseId, onVersionCreated }: CourseBuilderProps
   }, [courseId])
 
   useEffect(() => {
+    let cancelled = false
+    const loadDraft = async () => {
+      const response = await fetch(`/api/courses/${courseId}/draft`)
+      if (cancelled) return
+      if (response.ok) {
+        const data = await response.json()
+        if (data.modules) {
+          setModules(data.modules)
+        }
+      }
+      setLoading(false)
+    }
     loadDraft()
-  }, [loadDraft])
+    return () => { cancelled = true }
+  }, [courseId])
 
   useEffect(() => {
     if (!loading) {

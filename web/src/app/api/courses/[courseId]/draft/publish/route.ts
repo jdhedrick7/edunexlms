@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { createAdminClient } from '@/lib/supabase/admin'
 
 interface Module {
   id: string
@@ -76,7 +75,6 @@ export async function POST(
   }
 
   const bucketId = `inst-${course.institution_id}`
-  const adminClient = createAdminClient()
 
   // Get next version number
   const { data: maxVersion } = await supabase
@@ -107,7 +105,7 @@ export async function POST(
     }
 
     try {
-      await adminClient.storage
+      await supabase.storage
         .from(bucketId)
         .upload(`${modulePath}/module.json`, JSON.stringify(moduleJson, null, 2), {
           contentType: 'application/json',
@@ -121,7 +119,7 @@ export async function POST(
     // content.md
     if (module.content) {
       try {
-        await adminClient.storage
+        await supabase.storage
           .from(bucketId)
           .upload(`${modulePath}/content.md`, module.content, {
             contentType: 'text/markdown',
@@ -146,7 +144,7 @@ export async function POST(
       }
 
       try {
-        await adminClient.storage
+        await supabase.storage
           .from(bucketId)
           .upload(`${modulePath}/assignment.json`, JSON.stringify(assignmentJson, null, 2), {
             contentType: 'application/json',
@@ -181,7 +179,7 @@ export async function POST(
       }
 
       try {
-        await adminClient.storage
+        await supabase.storage
           .from(bucketId)
           .upload(`${modulePath}/quiz.json`, JSON.stringify(quizJson, null, 2), {
             contentType: 'application/json',
