@@ -378,6 +378,42 @@ export type Database = {
           },
         ]
       }
+      course_drafts: {
+        Row: {
+          course_id: string
+          modules: Json
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          course_id: string
+          modules?: Json
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          course_id?: string
+          modules?: Json
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_drafts_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: true
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "course_drafts_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       course_versions: {
         Row: {
           approved_at: string | null
