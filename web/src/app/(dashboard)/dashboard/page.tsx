@@ -23,16 +23,16 @@ export default async function DashboardPage() {
   const courseIds = enrollments?.map(e => e.course_id) || []
   const { data: announcements } = courseIds.length > 0
     ? await supabase
-        .from('announcements')
-        .select(`
+      .from('announcements')
+      .select(`
           *,
           course:courses(name, code),
           author:users(full_name)
         `)
-        .in('course_id', courseIds)
-        .lte('publish_at', new Date().toISOString())
-        .order('publish_at', { ascending: false })
-        .limit(5)
+      .in('course_id', courseIds)
+      .lte('publish_at', new Date().toISOString())
+      .order('publish_at', { ascending: false })
+      .limit(5)
     : { data: [] }
 
   // Get unread notifications count
@@ -124,22 +124,23 @@ export default async function DashboardPage() {
             {announcements && announcements.length > 0 ? (
               <div className="space-y-4">
                 {announcements.map((announcement) => (
-                  <div
-                    key={announcement.id}
-                    className="border p-4"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="space-y-1">
-                        <p className="font-medium">{announcement.title}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {announcement.course?.code} &middot; {announcement.author?.full_name}
-                        </p>
+                    <Link
+                      key={announcement.id}
+                      href={`/courses/${announcement.course_id}/announcements/${announcement.id}`}
+                      className="block border p-4 transition-colors hover:bg-accent"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="space-y-1">
+                          <p className="font-medium">{announcement.title}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {announcement.course?.code} &middot; {announcement.author?.full_name}
+                          </p>
+                        </div>
+                        <time className="text-xs text-muted-foreground whitespace-nowrap">
+                          {new Date(announcement.publish_at!).toLocaleDateString()}
+                        </time>
                       </div>
-                      <time className="text-xs text-muted-foreground whitespace-nowrap">
-                        {new Date(announcement.publish_at!).toLocaleDateString()}
-                      </time>
-                    </div>
-                  </div>
+                    </Link>
                 ))}
               </div>
             ) : (
