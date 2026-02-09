@@ -1,3 +1,5 @@
+type TimeOfDay = 'Morning' | 'Afternoon' | 'Evening'
+
 /**
  * Format a date as a relative time string (e.g., "2 hours ago")
  */
@@ -79,3 +81,19 @@ export function formatDateTime(date: Date | string): string {
     minute: '2-digit',
   })
 }
+
+
+/**
+ * Formats time of day based on user's time
+ * 
+ * @param date 
+ * @returns TimeOfDay enum value 
+ */
+export function getTimeOfDay(date = new Date()): TimeOfDay {
+  const hour = date.getHours() 
+
+  if (hour < 12) {return 'Morning'}
+  if (hour < 18) {return 'Afternoon'}
+  return 'Evening'
+}
+

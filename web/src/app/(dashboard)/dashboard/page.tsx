@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import Link from 'next/link'
+import { getTimeOfDay } from '@/lib/date-utils'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -18,6 +20,14 @@ export default async function DashboardPage() {
     `)
     .eq('user_id', user!.id)
     .limit(6)
+
+  const { data: profile } = await supabase
+    .from('users')
+    .select('full_name, avatar_url')
+    .eq('id', user!.id)
+    .single()
+
+  const firstName = profile?.full_name?.split(' ')[0] || 'there'
 
   // Get recent announcements from enrolled courses
   const courseIds = enrollments?.map(e => e.course_id) || []
@@ -44,11 +54,13 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground">
-          Welcome back! Here&apos;s what&apos;s happening in your courses.
-        </p>
+      <div className="flex items-center gap-6">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Good {getTimeOfDay()}, {firstName}</h1>
+          <p className="text-muted-foreground">
+            Welcome back! Here&apos;s what&apos;s happening in your courses.
+          </p>
+        </div>
       </div>
 
       {/* Stats Cards */}
