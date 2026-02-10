@@ -2,7 +2,6 @@ import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import Link from 'next/link'
 import { getTimeOfDay } from '@/lib/date-utils'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -54,41 +53,34 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-6">
-        <div>
+      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+        <div className="min-w-0 flex-1">
           <h1 className="text-3xl font-bold tracking-tight">Good {getTimeOfDay()}, {firstName}</h1>
           <p className="text-muted-foreground">
             Welcome back! Here&apos;s what&apos;s happening in your courses.
           </p>
         </div>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Enrolled Courses</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{enrollments?.length || 0}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Unread Notifications</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{unreadCount || 0}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Recent Announcements</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{announcements?.length || 0}</div>
-          </CardContent>
-        </Card>
+        {/* Stats Cards */}
+        <div className="ml-auto flex flex-row flex-nowrap items-start justify-end gap-2">
+          <Card className="h-16 min-w-[170px]">
+            <CardContent className="flex h-full items-center justify-between gap-3 px-3 py-0">
+              <p className="text-xs text-muted-foreground">Enrolled Courses</p>
+              <p className="text-xl font-semibold leading-none">{enrollments?.length || 0}</p>
+            </CardContent>
+          </Card>
+          <Card className="h-16 min-w-[170px]">
+            <CardContent className="flex h-full items-center justify-between gap-3 px-3 py-0">
+              <p className="text-xs text-muted-foreground">Unread Notifications</p>
+              <p className="text-xl font-semibold leading-none">{unreadCount || 0}</p>
+            </CardContent>
+          </Card>
+          <Card className="h-16 min-w-[170px]">
+            <CardContent className="flex h-full items-center justify-between gap-3 px-3 py-0">
+              <p className="text-xs text-muted-foreground">Recent Announcements</p>
+              <p className="text-xl font-semibold leading-none">{announcements?.length || 0}</p>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
